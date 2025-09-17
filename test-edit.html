@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Test</title>
+    <style>
+        .edit-form {
+            display: none;
+            padding: 10px;
+            background: #f0f8ff;
+            border: 2px solid #4CAF50;
+            margin: 10px 0;
+        }
+        .edit-form.active {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        .edit-button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .confirm-btn, .cancel-btn {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        .confirm-btn { background: #4caf50; color: white; }
+        .cancel-btn { background: #f44336; color: white; }
+        .page-input {
+            width: 80px;
+            padding: 5px;
+            text-align: center;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+    <h1>Edit Button Test</h1>
+    
+    <div>
+        <p>Test Tab 1:</p>
+        <button class="edit-button" onclick="editPage(1, 25)">✏️ Edit Page</button>
+        <div class="edit-form" id="edit-form-1">
+            <label>New Page:</label>
+            <input type="number" class="page-input" id="page-input-1" value="25">
+            <button class="confirm-btn" onclick="confirmEdit(1)">✅ Update</button>
+            <button class="cancel-btn" onclick="cancelEdit(1)">❌ Cancel</button>
+        </div>
+    </div>
+
+    <script>
+        console.log('🚀 Test script loaded');
+        
+        // Test edit function
+        window.editPage = function(tabNo, currentPage) {
+            console.log('🎯 Edit button clicked for Tab ' + tabNo);
+            
+            // Hide all edit forms first
+            var allForms = document.querySelectorAll('.edit-form');
+            for (var i = 0; i < allForms.length; i++) {
+                allForms[i].classList.remove('active');
+            }
+            
+            // Show this edit form
+            var editForm = document.getElementById('edit-form-' + tabNo);
+            if (editForm) {
+                editForm.classList.add('active');
+                console.log('✅ Edit form shown for Tab ' + tabNo);
+                
+                // Focus on input
+                setTimeout(function() {
+                    var input = document.getElementById('page-input-' + tabNo);
+                    if (input) {
+                        input.focus();
+                        input.select();
+                        console.log('📝 Input focused for Tab ' + tabNo);
+                    }
+                }, 150);
+            } else {
+                console.error('❌ Edit form not found for Tab ' + tabNo);
+            }
+        };
+        
+        window.cancelEdit = function(tabNo) {
+            console.log('❌ Cancel edit for Tab ' + tabNo);
+            var editForm = document.getElementById('edit-form-' + tabNo);
+            if (editForm) {
+                editForm.classList.remove('active');
+            }
+        };
+        
+        window.confirmEdit = function(tabNo) {
+            var input = document.getElementById('page-input-' + tabNo);
+            var newPage = input.value;
+            console.log('✅ Confirm edit for Tab ' + tabNo + ' to page ' + newPage);
+            alert('Would update Tab ' + tabNo + ' to page ' + newPage);
+        };
+    </script>
+</body>
+</html>

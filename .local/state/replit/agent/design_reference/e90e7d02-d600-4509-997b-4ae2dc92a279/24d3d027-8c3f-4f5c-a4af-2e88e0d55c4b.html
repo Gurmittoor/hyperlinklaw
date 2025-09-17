@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Judge-Link - Document Hyperlinking System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+    tailwind.config = {
+        theme: {
+            extend: {
+                borderRadius: {
+                    lg: "var(--radius)",
+                    md: "calc(var(--radius) - 2px)",
+                    sm: "calc(var(--radius) - 4px)",
+                },
+                colors: {
+                    background: "var(--background)",
+                    foreground: "var(--foreground)",
+                    card: {
+                        DEFAULT: "var(--card)",
+                        foreground: "var(--card-foreground)",
+                    },
+                    popover: {
+                        DEFAULT: "var(--popover)",
+                        foreground: "var(--popover-foreground)",
+                    },
+                    primary: {
+                        DEFAULT: "var(--primary)",
+                        foreground: "var(--primary-foreground)",
+                    },
+                    secondary: {
+                        DEFAULT: "var(--secondary)",
+                        foreground: "var(--secondary-foreground)",
+                    },
+                    muted: {
+                        DEFAULT: "var(--muted)",
+                        foreground: "var(--muted-foreground)",
+                    },
+                    accent: {
+                        DEFAULT: "var(--accent)",
+                        foreground: "var(--accent-foreground)",
+                    },
+                    destructive: {
+                        DEFAULT: "var(--destructive)",
+                        foreground: "var(--destructive-foreground)",
+                    },
+                    border: "var(--border)",
+                    input: "var(--input)",
+                    ring: "var(--ring)",
+                }
+            }
+        }
+    };
+    </script>
+    <style>
+        :root {
+            --background: hsl(222, 84%, 5%);
+            --foreground: hsl(210, 40%, 98%);
+            --card: hsl(217, 33%, 17%);
+            --card-foreground: hsl(210, 40%, 98%);
+            --popover: hsl(217, 33%, 17%);
+            --popover-foreground: hsl(210, 40%, 98%);
+            --primary: hsl(217, 91%, 60%);
+            --primary-foreground: hsl(222, 84%, 5%);
+            --secondary: hsl(217, 19%, 27%);
+            --secondary-foreground: hsl(210, 40%, 98%);
+            --muted: hsl(215, 19%, 25%);
+            --muted-foreground: hsl(217, 10%, 64%);
+            --accent: hsl(217, 19%, 27%);
+            --accent-foreground: hsl(210, 40%, 98%);
+            --destructive: hsl(0, 63%, 31%);
+            --destructive-foreground: hsl(210, 40%, 98%);
+            --border: hsl(217, 19%, 27%);
+            --input: hsl(217, 19%, 27%);
+            --ring: hsl(217, 91%, 60%);
+            --radius: 8px;
+        }
+        
+        .font-inter { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; }
+        
+        .upload-area {
+            background: linear-gradient(135deg, hsl(217, 33%, 17%) 0%, hsl(215, 19%, 25%) 100%);
+            border: 2px dashed hsl(217, 91%, 60%);
+        }
+        
+        .upload-area:hover {
+            border-color: hsl(217, 91%, 70%);
+            background: linear-gradient(135deg, hsl(217, 33%, 20%) 0%, hsl(215, 19%, 28%) 100%);
+        }
+        
+        .progress-bar {
+            background: linear-gradient(90deg, hsl(217, 91%, 60%) 0%, hsl(142, 71%, 45%) 100%);
+        }
+        
+        .table-hover:hover {
+            background-color: hsl(217, 19%, 27%);
+        }
+        
+        .status-pending { background-color: hsl(43, 96%, 56%); color: hsl(222, 84%, 5%); }
+        .status-processing { background-color: hsl(217, 91%, 60%); color: hsl(210, 40%, 98%); }
+        .status-review { background-color: hsl(262, 83%, 58%); color: hsl(210, 40%, 98%); }
+        .status-approved { background-color: hsl(142, 71%, 45%); color: hsl(210, 40%, 98%); }
+        .status-failed { background-color: hsl(0, 63%, 31%); color: hsl(210, 40%, 98%); }
+        
+        .animate-pulse-fast { animation: pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+        
+        .link-annotation {
+            border: 1px solid hsl(217, 91%, 60%);
+            background-color: hsla(217, 91%, 60%, 0.1);
+        }
+        
+        .link-annotation:hover {
+            background-color: hsla(217, 91%, 60%, 0.2);
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-background text-foreground font-inter">
+    <!-- @COMPONENT: MainLayout -->
+    <div class="min-h-screen flex">
+        <!-- Sidebar Navigation -->
+        <!-- @COMPONENT: Sidebar -->
+        <aside class="w-64 bg-card border-r border-border flex flex-col">
+            <div class="p-6 border-b border-border">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+                        <i class="fas fa-gavel text-primary-foreground text-sm"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold text-foreground">Judge-Link</h1>
+                        <p class="text-xs text-muted-foreground">Legal Document System</p>
+                    </div>
+                </div>
+            </div>
+            
+            <nav class="flex-1 p-4 space-y-2">
+                <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-md bg-primary text-primary-foreground font-medium">
+                    <i class="fas fa-folder-open text-sm"></i>
+                    Documents
+                </a>
+                <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-secondary text-muted-foreground hover:text-foreground transition-colors">
+                    <i class="fas fa-link text-sm"></i>
+                    Hyperlinks
+                </a>
+                <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-secondary text-muted-foreground hover:text-foreground transition-colors">
+                    <i class="fas fa-check-circle text-sm"></i>
+                    Review Queue
+                </a>
+                <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-secondary text-muted-foreground hover:text-foreground transition-colors">
+                    <i class="fas fa-download text-sm"></i>
+                    Court Ready
+                </a>
+            </nav>
+            
+            <div class="p-4 border-t border-border">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 bg-muted rounded-full flex items-center justify-center">
+                        <i class="fas fa-user text-muted-foreground text-sm"></i>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <p class="text-sm font-medium text-foreground truncate" data-mock="true">Sarah Chen</p>
+                        <p class="text-xs text-muted-foreground truncate" data-mock="true">Legal Associate</p>
+                    </div>
+                </div>
+            </div>
+        </aside>
+        <!-- @END_COMPONENT: Sidebar -->
+
+        <!-- Main Content -->
+        <main class="flex-1 flex flex-col">
+            <!-- Header -->
+            <!-- @COMPONENT: Header -->
+            <header class="bg-card border-b border-border px-6 py-4">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h2 class="text-2xl font-bold text-foreground">Case Documents</h2>
+                        <p class="text-sm text-muted-foreground mt-1">Case #2024-CV-001234 - Johnson vs. Metropolitan Insurance</p>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <button class="px-4 py-2 bg-secondary text-secondary-foreground rounded-md hover:bg-secondary/80 transition-colors flex items-center gap-2" data-event="click:handleBatchProcess">
+                            <i class="fas fa-cogs text-sm"></i>
+                            Process Selected
+                        </button>
+                        <button class="px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors flex items-center gap-2" data-event="click:handleUpload">
+                            <i class="fas fa-plus text-sm"></i>
+                            Upload Documents
+                        </button>
+                    </div>
+                </div>
+            </header>
+            <!-- @END_COMPONENT: Header -->
+
+            <!-- Upload Area (Initially Hidden) -->
+            <!-- @COMPONENT: UploadArea -->
+            <div id="uploadArea" class="hidden mx-6 mt-6">
+                <div class="upload-area rounded-lg p-8 text-center transition-all duration-200">
+                    <div class="flex flex-col items-center gap-4">
+                        <div class="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center">
+                            <i class="fas fa-cloud-upload-alt text-primary text-2xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-semibold text-foreground">Upload Legal Documents</h3>
+                            <p class="text-muted-foreground mt-1">Drag and drop PDF files here, or click to browse</p>
+                        </div>
+                        <div class="flex flex-col gap-2 text-sm text-muted-foreground">
+                            <p>• Supports PDF files only</p>
+                            <p>• Maximum file size: 50MB</p>
+                            <p>• Multiple files supported</p>
+                        </div>
+                        <input type="file" multiple accept=".pdf" class="hidden" id="fileInput" data-implementation="Handle file upload with instant table row creation">
+                        <button class="px-6 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors" onclick="document.getElementById('fileInput').click()">
+                            Select Files
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <!-- @END_COMPONENT: UploadArea -->
+
+            <!-- Document Table -->
+            <!-- @COMPONENT: DocumentTable -->
+            <div class="flex-1 p-6">
+                <div class="bg-card rounded-lg border border-border overflow-hidden">
+                    <!-- Table Header -->
+                    <div class="px-6 py-4 border-b border-border">
+                        <div class="flex items-center justify-between">
+                            <h3 class="text-lg font-semibold text-foreground">Document Library</h3>
+                            <div class="flex items-center gap-4">
+                                <div class="flex items-center gap-2 text-sm text-muted-foreground">
+                                    <i class="fas fa-check-square text-primary"></i>
+                                    <span data-bind="selectedCount">3</span> selected
+                                </div>
+                                <div class="relative">
+                                    <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground text-sm"></i>
+                                    <input type="text" placeholder="Search documents..." class="pl-10 pr-4 py-2 bg-input border border-border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-ring">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Table Content -->
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead class="bg-muted/50">
+                                <tr>
+                                    <th class="text-left p-4 font-medium text-muted-foreground">
+                                        <input type="checkbox" class="rounded border-border bg-input" data-event="change:handleSelectAll">
+                                    </th>
+                                    <th class="text-left p-4 font-medium text-muted-foreground">Document</th>
+                                    <th class="text-left p-4 font-medium text-muted-foreground">Status</th>
+                                    <th class="text-left p-4 font-medium text-muted-foreground">Links</th>
+                                    <th class="text-left p-4 font-medium text-muted-foreground">Progress</th>
+                                    <th class="text-left p-4 font-medium text-muted-foreground">Uploaded</th>
+                                    <th class="text-left p-4 font-medium text-muted-foreground">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- @MAP: documents.map(doc => ( -->
+                                <tr class="table-hover border-b border-border transition-colors">
+                                    <td class="p-4">
+                                        <input type="checkbox" class="rounded border-border bg-input" data-bind="doc.selected">
+                                    </td>
+                                    <td class="p-4">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-10 h-10 bg-destructive/20 rounded flex items-center justify-center">
+                                                <i class="fas fa-file-pdf text-destructive text-lg"></i>
+                                            </div>
+                                            <div>
+                                                <div class="font-medium text-foreground" data-mock="true">Medical Records - Johnson.pdf</div>
+                                                <div class="text-sm text-muted-foreground" data-mock="true">Exhibit A-001 • 47 pages • 2.3 MB</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="p-4">
+                                        <span class="status-approved px-2 py-1 rounded text-xs font-medium">
+                                            <i class="fas fa-check-circle mr-1"></i>
+                                            Approved
+                                        </span>
+                                    </td>
+                                    <td class="p-4">
+                                        <div class="flex items-center gap-2">
+                                            <span class="text-sm font-medium text-foreground" data-mock="true">12</span>
+                                            <span class="text-xs text-muted-foreground">links</span>
+                                        </div>
+                                    </td>
+                                    <td class="p-4">
+                                        <div class="w-full bg-muted rounded-full h-2">
+                                            <div class="progress-bar h-2 rounded-full" style="width: 100%"></div>
+                                        </div>
+                                        <div class="text-xs text-muted-foreground mt-1">Complete</div>
+                                    </td>
+                                    <td class="p-4">
+                                        <div class="text-sm text-foreground" data-mock="true">Jan 15, 2024</div>
+                                        <div class="text-xs text-muted-foreground" data-mock="true">2:34 PM</div>
+                                    </td>
+                                    <td class="p-4">
+                                        <div class="flex items-center gap-2">
+                                            <button class="p-2 hover:bg-secondary rounded text-muted-foreground hover:text-foreground transition-colors" title="Review Links" data-event="click:openReviewModal">
+                                                <i class="fas fa-eye text-sm"></i>
+                                            </button>
+                                            <button class="p-2 hover:bg-secondary rounded text-muted-foreground hover:text-foreground transition-colors" title="Download PDF" data-event="click:downloadPDF">
+                                                <i class="fas fa-download text-sm"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <tr class="table-hover border-b border-border transition-colors">
+                                    <td class="p-4">
+                                        <input type="checkbox" class="rounded border-border bg-input" checked data-bind="doc.selected">
+                                    </td>
+                                    <td class="p-4">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-10 h-10 bg-destructive/20 rounded flex items-center justify-center">
+                                                <i class="fas fa-file-pdf text-destructive text-lg"></i>
+                                            </div>
+                                            <div>
+                                                <div class="font-medium text-foreground" data-mock="true">Insurance Policy Contract.pdf</div>
+                                                <div class="text-sm text-muted-foreground" data-mock="true">Exhibit B-002 • 124 pages • 5.7 MB</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="p-4">
+                                        <span class="status-processing px-2 py-1 rounded text-xs font-medium animate-pulse-fast">
+                                            <i class="fas fa-cog fa-spin mr-1"></i>
+                                            Processing
+                                        </span>
+                                    </td>
+                                    <td class="p-4">
+                                        <div class="flex items-center gap-2">
+                                            <span class="text-sm font-medium text-foreground" data-mock="true">8</span>
+                                            <span class="text-xs text-muted-foreground">links</span>
+                                        </div>
+                                    </td>
+                                    <td class="p-4">
+                                        <div class="w-full bg-muted rounded-full h-2">
+                                            <div class="progress-bar h-2 rounded-full" style="width: 65%"></div>
+                                        </div>
+                                        <div class="text-xs text-muted-foreground mt-1">65% complete</div>
+                                    </td>
+                                    <td class="p-4">
+                                        <div class="text-sm text-foreground" data-mock="true">Jan 15, 2024</div>
+                                        <div class="text-xs text-muted-foreground" data-mock="true">3:45 PM</div>
+                                    </td>
+                                    <td class="p-4">
+                                        <div class="flex items-center gap-2">
+                                            <button class="p-2 hover:bg-secondary rounded text-muted-foreground hover:text-foreground transition-colors opacity-50 cursor-not-allowed" title="Processing..." disabled>
+                                                <i class="fas fa-eye text-sm"></i>
+                                            </button>
+                                            <button class="p-2 hover:bg-secondary rounded text-muted-foreground hover:text-foreground transition-colors opacity-50 cursor-not-allowed" title="Not available" disabled>
+                                                <i class="fas fa-download text-sm"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <tr class="table-hover border-b border-border transition-colors">
+                                    <td class="p-4">
+                                        <input type="checkbox" class="rounded border-border bg-input" checked data-bind="doc.selected">
+                                    </td>
+                                    <td class="p-4">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-10 h-10 bg-destructive/20 rounded flex items-center justify-center">
+                                                <i class="fas fa-file-pdf text-destructive text-lg"></i>
+                                            </div>
+                                            <div>
+                                                <div class="font-medium text-foreground" data-mock="true">Expert Witness Report.pdf</div>
+                                                <div class="text-sm text-muted-foreground" data-mock="true">Exhibit C-003 • 23 pages • 1.8 MB</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="p-4">
+                                        <span class="status-review px-2 py-1 rounded text-xs font-medium">
+                                            <i class="fas fa-search mr-1"></i>
+                                            In Review
+                                        </span>
+                                    </td>
+                                    <td class="p-4">
+                                        <div class="flex items-center gap-2">
+                                            <span class="text-sm font-medium text-foreground" data-mock="true">5</span>
+                                            <span class="text-xs text-muted-foreground">links</span>
+                                        </div>
+                                    </td>
+                                    <td class="p-4">
+                                        <div class="w-full bg-muted rounded-full h-2">
+                                            <div class="progress-bar h-2 rounded-full" style="width: 100%"></div>
+                                        </div>
+                                        <div class="text-xs text-muted-foreground mt-1">Ready for review</div>
+                                    </td>
+                                    <td class="p-4">
+                                        <div class="text-sm text-foreground" data-mock="true">Jan 15, 2024</div>
+                                        <div class="text-xs text-muted-foreground" data-mock="true">4:12 PM</div>
+                                    </td>
+                                    <td class="p-4">
+                                        <div class="flex items-center gap-2">
+                                            <button class="p-2 hover:bg-secondary rounded text-muted-foreground hover:text-foreground transition-colors" title="Review Links" data-event="click:openReviewModal">
+                                                <i class="fas fa-eye text-sm"></i>
+                                            </button>
+                                            <button class="p-2 hover:bg-secondary rounded text-muted-foreground hover:text-foreground transition-colors opacity-50 cursor-not-allowed" title="Pending approval" disabled>
+                                                <i class="fas fa-download text-sm"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <tr class="table-hover border-b border-border transition-colors">
+                                    <td class="p-4">
+                                        <input type="checkbox" class="rounded border-border bg-input" checked data-bind="doc.selected">
+                                    </td>
+                                    <td class="p-4">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-10 h-10 bg-destructive/20 rounded flex items-center justify-center">
+                                                <i class="fas fa-file-pdf text-destructive text-lg"></i>
+                                            </div>
+                                            <div>
+                                                <div class="font-medium text-foreground" data-mock="true">Case Precedents Analysis.pdf</div>
+                                                <div class="text-sm text-muted-foreground" data-mock="true">Legal Research • 89 pages • 4.2 MB</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="p-4">
+                                        <span class="status-pending px-2 py-1 rounded text-xs font-medium">
+                                            <i class="fas fa-clock mr-1"></i>
+                                            Pending
+                                        </span>
+                                    </td>
+                                    <td class="p-4">
+                                        <div class="text-sm text-muted-foreground">—</div>
+                                    </td>
+                                    <td class="p-4">
+                                        <div class="w-full bg-muted rounded-full h-2">
+                                            <div class="progress-bar h-2 rounded-full" style="width: 0%"></div>
+                                        </div>
+                                        <div class="text-xs text-muted-foreground mt-1">Queued</div>
+                                    </td>
+                                    <td class="p-4">
+                                        <div class="text-sm text-foreground" data-mock="true">Jan 15, 2024</div>
+                                        <div class="text-xs text-muted-foreground" data-mock="true">4:58 PM</div>
+                                    </td>
+                                    <td class="p-4">
+                                        <div class="flex items-center gap-2">
+                                            <button class="p-2 hover:bg-secondary rounded text-muted-foreground hover:text-foreground transition-colors opacity-50 cursor-not-allowed" title="Not processed" disabled>
+                                                <i class="fas fa-eye text-sm"></i>
+                                            </button>
+                                            <button class="p-2 hover:bg-secondary rounded text-muted-foreground hover:text-foreground transition-colors" title="Download Original" data-event="click:downloadOriginal">
+                                                <i class="fas fa-download text-sm"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <!-- @END_MAP )) -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <!-- @END_COMPONENT: DocumentTable -->
+        </main>
+    </div>
+    <!-- @END_COMPONENT: MainLayout -->
+
+    <!-- Review Modal -->
+    <!-- @COMPONENT: ReviewModal -->
+    <div id="reviewModal" class="hidden fixed inset-0 bg-background/80 backdrop-blur-sm z-50">
+        <div class="flex min-h-full items-center justify-center p-4">
+            <div class="bg-card border border-border rounded-lg w-full max-w-7xl h-[90vh] flex flex-col">
+                <!-- Modal Header -->
+                <div class="flex items-center justify-between p-6 border-b border-border">
+                    <div>
+                        <h3 class="text-xl font-semibold text-foreground">Link Review - Medical Records</h3>
+                        <p class="text-sm text-muted-foreground mt-1">Review and edit hyperlinks before court submission</p>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <button class="px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors" data-event="click:regeneratePDF">
+                            <i class="fas fa-sync-alt mr-2"></i>
+                            Regenerate PDF
+                        </button>
+                        <button class="px-4 py-2 bg-secondary text-secondary-foreground rounded-md hover:bg-secondary/80 transition-colors" data-event="click:markApproved">
+                            <i class="fas fa-check mr-2"></i>
+                            Mark as Approved
+                        </button>
+                        <button class="p-2 hover:bg-secondary rounded text-muted-foreground hover:text-foreground transition-colors" data-event="click:closeModal">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Split Screen Content -->
+                <div class="flex-1 flex overflow-hidden">
+                    <!-- PDF Viewer -->
+                    <div class="flex-1 bg-muted/30 p-4 overflow-auto">
+                        <div class="bg-white rounded shadow-lg mx-auto" style="width: 600px; height: 800px; position: relative;">
+                            <!-- PDF content placeholder -->
+                            <div class="w-full h-full flex items-center justify-center text-gray-400">
+                                <div class="text-center">
+                                    <i class="fas fa-file-pdf text-6xl mb-4"></i>
+                                    <p class="text-lg font-medium">PDF Viewer</p>
+                                    <p class="text-sm">Medical Records - Johnson.pdf</p>
+                                    <p class="text-xs mt-2">Page 1 of 47</p>
+                                </div>
+                            </div>
+                            
+                            <!-- Link annotations overlay -->
+                            <div class="link-annotation absolute rounded cursor-pointer" style="top: 120px; left: 50px; width: 180px; height: 20px;" title="Link to page 15" data-event="click:highlightLink">
+                            </div>
+                            <div class="link-annotation absolute rounded cursor-pointer" style="top: 280px; left: 100px; width: 220px; height: 20px;" title="Link to Insurance Policy" data-event="click:highlightLink">
+                            </div>
+                            <div class="link-annotation absolute rounded cursor-pointer" style="top: 420px; left: 75px; width: 160px; height: 20px;" title="Link to page 23" data-event="click:highlightLink">
+                            </div>
+                        </div>
+                        
+                        <!-- PDF Navigation -->
+                        <div class="flex items-center justify-center gap-4 mt-4">
+                            <button class="p-2 bg-card border border-border rounded hover:bg-secondary transition-colors" data-event="click:previousPage">
+                                <i class="fas fa-chevron-left"></i>
+                            </button>
+                            <span class="text-sm text-muted-foreground">Page 1 of 47</span>
+                            <button class="p-2 bg-card border border-border rounded hover:bg-secondary transition-colors" data-event="click:nextPage">
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Links Panel -->
+                    <div class="w-96 border-l border-border bg-card/50 flex flex-col">
+                        <div class="p-4 border-b border-border">
+                            <h4 class="font-semibold text-foreground">Detected Links</h4>
+                            <p class="text-sm text-muted-foreground mt-1">12 links found</p>
+                        </div>
+                        
+                        <div class="flex-1 overflow-auto p-4 space-y-3">
+                            <!-- @MAP: links.map(link => ( -->
+                            <div class="bg-card border border-border rounded-lg p-4 hover:bg-secondary/50 transition-colors">
+                                <div class="flex items-start justify-between">
+                                    <div class="flex-1">
+                                        <div class="flex items-center gap-2 mb-2">
+                                            <span class="text-xs px-2 py-1 bg-primary/20 text-primary rounded">Page 1</span>
+                                            <i class="fas fa-arrow-right text-muted-foreground text-xs"></i>
+                                            <span class="text-xs px-2 py-1 bg-accent/20 text-accent-foreground rounded">Page 15</span>
+                                        </div>
+                                        <p class="text-sm text-foreground font-medium" data-mock="true">Medical examination results</p>
+                                        <p class="text-xs text-muted-foreground mt-1" data-mock="true">Reference to detailed findings on page 15</p>
+                                        <div class="flex items-center gap-2 mt-2">
+                                            <div class="flex items-center gap-1">
+                                                <i class="fas fa-brain text-primary text-xs"></i>
+                                                <span class="text-xs text-muted-foreground">AI Confidence: 92%</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="flex gap-1 ml-2">
+                                        <button class="p-1 hover:bg-secondary rounded text-green-400 hover:text-green-300 transition-colors" title="Confirm Link" data-event="click:confirmLink">
+                                            <i class="fas fa-check text-xs"></i>
+                                        </button>
+                                        <button class="p-1 hover:bg-secondary rounded text-red-400 hover:text-red-300 transition-colors" title="Remove Link" data-event="click:removeLink">
+                                            <i class="fas fa-times text-xs"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="bg-card border border-border rounded-lg p-4 hover:bg-secondary/50 transition-colors">
+                                <div class="flex items-start justify-between">
+                                    <div class="flex-1">
+                                        <div class="flex items-center gap-2 mb-2">
+                                            <span class="text-xs px-2 py-1 bg-primary/20 text-primary rounded">Page 1</span>
+                                            <i class="fas fa-arrow-right text-muted-foreground text-xs"></i>
+                                            <span class="text-xs px-2 py-1 bg-purple-500/20 text-purple-400 rounded">Exhibit B-002</span>
+                                        </div>
+                                        <p class="text-sm text-foreground font-medium" data-mock="true">Insurance policy reference</p>
+                                        <p class="text-xs text-muted-foreground mt-1" data-mock="true">Links to Insurance Policy Contract document</p>
+                                        <div class="flex items-center gap-2 mt-2">
+                                            <div class="flex items-center gap-1">
+                                                <i class="fas fa-brain text-primary text-xs"></i>
+                                                <span class="text-xs text-muted-foreground">AI Confidence: 87%</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="flex gap-1 ml-2">
+                                        <button class="p-1 hover:bg-secondary rounded text-green-400 hover:text-green-300 transition-colors" title="Confirm Link" data-event="click:confirmLink">
+                                            <i class="fas fa-check text-xs"></i>
+                                        </button>
+                                        <button class="p-1 hover:bg-secondary rounded text-red-400 hover:text-red-300 transition-colors" title="Remove Link" data-event="click:removeLink">
+                                            <i class="fas fa-times text-xs"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="bg-card border border-border rounded-lg p-4 hover:bg-secondary/50 transition-colors">
+                                <div class="flex items-start justify-between">
+                                    <div class="flex-1">
+                                        <div class="flex items-center gap-2 mb-2">
+                                            <span class="text-xs px-2 py-1 bg-primary/20 text-primary rounded">Page 1</span>
+                                            <i class="fas fa-arrow-right text-muted-foreground text-xs"></i>
+                                            <span class="text-xs px-2 py-1 bg-accent/20 text-accent-foreground rounded">Page 23</span>
+                                        </div>
+                                        <p class="text-sm text-foreground font-medium" data-mock="true">Treatment timeline</p>
+                                        <p class="text-xs text-muted-foreground mt-1" data-mock="true">References chronological treatment data</p>
+                                        <div class="flex items-center gap-2 mt-2">
+                                            <div class="flex items-center gap-1">
+                                                <i class="fas fa-brain text-primary text-xs"></i>
+                                                <span class="text-xs text-muted-foreground">AI Confidence: 78%</span>
+                                            </div>
+                                            <span class="text-xs px-2 py-1 bg-green-500/20 text-green-400 rounded">Confirmed</span>
+                                        </div>
+                                    </div>
+                                    <div class="flex gap-1 ml-2">
+                                        <button class="p-1 hover:bg-secondary rounded text-green-400 hover:text-green-300 transition-colors opacity-50" title="Already Confirmed" disabled>
+                                            <i class="fas fa-check text-xs"></i>
+                                        </button>
+                                        <button class="p-1 hover:bg-secondary rounded text-red-400 hover:text-red-300 transition-colors" title="Remove Link" data-event="click:removeLink">
+                                            <i class="fas fa-times text-xs"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- @END_MAP )) -->
+                        </div>
+
+                        <!-- Panel Footer -->
+                        <div class="p-4 border-t border-border">
+                            <div class="grid grid-cols-3 gap-2 text-center text-xs">
+                                <div class="p-2 bg-muted/50 rounded">
+                                    <div class="font-medium text-foreground" data-bind="stats.totalLinks">12</div>
+                                    <div class="text-muted-foreground">Total</div>
+                                </div>
+                                <div class="p-2 bg-green-500/20 rounded">
+                                    <div class="font-medium text-green-400" data-bind="stats.confirmedLinks">8</div>
+                                    <div class="text-muted-foreground">Confirmed</div>
+                                </div>
+                                <div class="p-2 bg-primary/20 rounded">
+                                    <div class="font-medium text-primary" data-bind="stats.pendingLinks">4</div>
+                                    <div class="text-muted-foreground">Pending</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- @END_COMPONENT: ReviewModal -->
+
+    <!-- Success Toast Notification -->
+    <!-- @COMPONENT: ToastNotification -->
+    <div id="successToast" class="hidden fixed bottom-4 right-4 bg-card border border-border rounded-lg shadow-lg p-4 max-w-sm z-50">
+        <div class="flex items-center gap-3">
+            <div class="w-8 h-8 bg-green-500/20 rounded-full flex items-center justify-center">
+                <i class="fas fa-check text-green-400 text-sm"></i>
+            </div>
+            <div class="flex-1">
+                <p class="text-sm font-medium text-foreground">Documents Processed</p>
+                <p class="text-xs text-muted-foreground">3 documents have been hyperlinked successfully</p>
+            </div>
+            <button class="p-1 hover:bg-secondary rounded text-muted-foreground hover:text-foreground transition-colors" data-event="click:closeToast">
+                <i class="fas fa-times text-xs"></i>
+            </button>
+        </div>
+    </div>
+    <!-- @END_COMPONENT: ToastNotification -->
+
+    <script>
+        // TODO: Implement business logic, API calls, and state management
+        
+        (function() {
+            // Initialize application state
+            let appState = {
+                selectedDocuments: [],
+                isUploading: false,
+                reviewModalOpen: false
+            };
+
+            // Show/hide upload area
+            function toggleUploadArea() {
+                const uploadArea = document.getElementById('uploadArea');
+                uploadArea.classList.toggle('hidden');
+            }
+
+            // Handle file upload simulation
+            function handleFileUpload(files) {
+                // TODO: Implement actual file upload with Supabase storage
+                console.log('Files selected:', files);
+                // Simulate instant table row creation
+                showSuccessToast('Files uploaded and processing started');
+            }
+
+            // Show success toast
+            function showSuccessToast(message) {
+                const toast = document.getElementById('successToast');
+                toast.classList.remove('hidden');
+                setTimeout(() => {
+                    toast.classList.add('hidden');
+                }, 3000);
+            }
+
+            // Open review modal
+            function openReviewModal() {
+                const modal = document.getElementById('reviewModal');
+                modal.classList.remove('hidden');
+                appState.reviewModalOpen = true;
+            }
+
+            // Close review modal
+            function closeReviewModal() {
+                const modal = document.getElementById('reviewModal');
+                modal.classList.add('hidden');
+                appState.reviewModalOpen = false;
+            }
+
+            // Event listeners
+            document.addEventListener('click', function(e) {
+                // Upload button
+                if (e.target.closest('[data-event="click:handleUpload"]')) {
+                    toggleUploadArea();
+                }
+                
+                // Review button
+                if (e.target.closest('[data-event="click:openReviewModal"]')) {
+                    openReviewModal();
+                }
+                
+                // Close modal
+                if (e.target.closest('[data-event="click:closeModal"]')) {
+                    closeReviewModal();
+                }
+                
+                // Close toast
+                if (e.target.closest('[data-event="click:closeToast"]')) {
+                    e.target.closest('#successToast').classList.add('hidden');
+                }
+            });
+
+            // File input change handler
+            document.getElementById('fileInput').addEventListener('change', function(e) {
+                if (e.target.files.length > 0) {
+                    handleFileUpload(e.target.files);
+                    toggleUploadArea();
+                }
+            });
+
+            // Close modal on backdrop click
+            document.getElementById('reviewModal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeReviewModal();
+                }
+            });
+
+        })();
+    </script>
+</body>
+</html>

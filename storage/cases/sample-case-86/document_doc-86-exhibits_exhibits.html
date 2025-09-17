@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📋 Complete Exhibit Index - 86-Page Document</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); margin: 0; padding: 20px; }
+        .container { max-width: 1400px; margin: 0 auto; background: white; border-radius: 15px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%); color: white; padding: 40px; text-align: center; }
+        .header h1 { font-size: 2.5em; margin-bottom: 10px; text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
+        .content { padding: 40px; }
+        .exhibits-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)); gap: 20px; margin-top: 30px; }
+        .exhibit-item { background: #ffffff; border: 2px solid #e1e8ff; border-radius: 12px; padding: 20px; transition: all 0.3s ease; }
+        .exhibit-item:hover { border-color: #3498db; transform: translateY(-3px); box-shadow: 0 8px 25px rgba(52, 152, 219, 0.15); }
+        .exhibit-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .exhibit-label { background: linear-gradient(135deg, #3498db, #2980b9); color: white; padding: 8px 16px; border-radius: 20px; font-weight: bold; font-size: 1.1em; }
+        .exhibit-page { background: #f8f9ff; color: #2c3e50; padding: 4px 12px; border-radius: 15px; font-size: 0.9em; font-weight: 600; }
+        .exhibit-title { color: #34495e; font-size: 1em; line-height: 1.4; margin-bottom: 15px; }
+        .edit-controls { display: flex; align-items: center; gap: 10px; margin-top: 10px; justify-content: space-between; }
+        .click-instruction { color: #3498db; text-decoration: none; font-weight: 600; padding: 8px 16px; border-radius: 8px; background: #f8f9ff; border: 2px solid #e1e8ff; transition: all 0.3s; flex: 1; text-align: center; display: block; }
+        .click-instruction:hover { background: #3498db; color: white; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3); }
+        .edit-button { background: #27ae60; color: white; border: none; padding: 8px 15px; border-radius: 15px; font-size: 0.85em; cursor: pointer; font-weight: 600; transition: all 0.3s; }
+        .edit-button:hover { background: #229954; transform: translateY(-2px); }
+        .edit-form { display: none; align-items: center; gap: 12px; margin-top: 15px; padding: 15px; background: #f0f8ff; border-radius: 10px; border: 2px solid #27ae60; }
+        .edit-form.active { display: flex; }
+        .page-input { width: 80px; padding: 8px 12px; border: 2px solid #27ae60; border-radius: 6px; text-align: center; font-weight: bold; font-size: 1em; background: white; }
+        .confirm-btn { background: #27ae60; color: white; border: none; padding: 4px 10px; border-radius: 4px; font-size: 0.8em; cursor: pointer; font-weight: 500; }
+        .cancel-btn { background: #e74c3c; color: white; border: none; padding: 4px 10px; border-radius: 4px; font-size: 0.8em; cursor: pointer; font-weight: 500; }
+        .footer { text-align: center; padding: 30px; background: #f8f9ff; color: #666; border-top: 1px solid #e1e8ff; }
+        .summary { background: #e8f4fd; padding: 25px; border-radius: 10px; margin-bottom: 30px; border-left: 5px solid #3498db; }
+        .summary h2 { color: #2c3e50; margin-bottom: 15px; font-size: 1.4em; }
+        .summary p { color: #5a6c7d; line-height: 1.6; margin-bottom: 10px; }
+        .test-button { background: #ff9800; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; margin: 15px auto; display: block; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📋 Complete Exhibit Hyperlink Index</h1>
+            <p>86-Page Document • All 12 Exhibits</p>
+        </div>
+        
+        <div class="content">
+            <div class="summary">
+                <h2>🎯 Professional Legal Document Navigation</h2>
+                <p><strong>Click any exhibit below</strong> to instantly open the PDF at that exact page in a new browser tab.</p>
+                <p>This index contains hyperlinks for <strong>all 12 exhibits</strong>: Exhibit A, Exhibit B, Exhibit C, Exhibit 1, Exhibit 2, Exhibit D, Exhibit E, Exhibit 3, Exhibit F, Exhibit G, Exhibit 4, Exhibit H.</p>
+                <p>Each hyperlink opens the document at the specific page containing that exhibit for precise legal document navigation.</p>
+                <button onclick="testEditButton()" class="test-button">
+                    🧪 Test JavaScript Functionality (Click First!)
+                </button>
+                <p style="font-size: 0.9em; color: #666; text-align: center; margin-top: 8px;">
+                    Verify JavaScript is working before using edit buttons
+                </p>
+            </div>
+            
+            <div class="exhibits-grid">
+                <div class="exhibit-item" id="exhibit-A">
+                    <div class="exhibit-header">
+                        <div class="exhibit-label">📄 Exhibit A</div>
+                        <div class="exhibit-page">Page 12</div>
+                    </div>
+                    <div class="exhibit-title">Purchase Agreement between parties dated January 2023</div>
+                    <div class="edit-controls">
+                        <a href="/online/pdf/sample-case-86/doc-86-exhibits#page=12" target="_blank" class="click-instruction" id="link-A">
+                            👆 Click to open PDF at page 12
+                        </a>
+                        <button class="edit-button" onclick="editPage('A', 12)">✏️ Edit Page</button>
+                    </div>
+                    <div class="edit-form" id="edit-form-A">
+                        <label style="font-weight: 600; color: #2E7D32;">📝 New Page Number:</label>
+                        <input type="number" class="page-input" id="page-input-A" min="1" max="86" value="12" placeholder="Page #">
+                        <button class="confirm-btn" onclick="confirmEdit('A')">✅ Update Link</button>
+                        <button class="cancel-btn" onclick="cancelEdit('A')">❌ Cancel</button>
+                    </div>
+                </div>
+
+                <div class="exhibit-item" id="exhibit-B">
+                    <div class="exhibit-header">
+                        <div class="exhibit-label">📄 Exhibit B</div>
+                        <div class="exhibit-page">Page 18</div>
+                    </div>
+                    <div class="exhibit-title">Financial Statements for fiscal year 2023</div>
+                    <div class="edit-controls">
+                        <a href="/online/pdf/sample-case-86/doc-86-exhibits#page=18" target="_blank" class="click-instruction" id="link-B">
+                            👆 Click to open PDF at page 18
+                        </a>
+                        <button class="edit-button" onclick="editPage('B', 18)">✏️ Edit Page</button>
+                    </div>
+                    <div class="edit-form" id="edit-form-B">
+                        <label style="font-weight: 600; color: #2E7D32;">📝 New Page Number:</label>
+                        <input type="number" class="page-input" id="page-input-B" min="1" max="86" value="18" placeholder="Page #">
+                        <button class="confirm-btn" onclick="confirmEdit('B')">✅ Update Link</button>
+                        <button class="cancel-btn" onclick="cancelEdit('B')">❌ Cancel</button>
+                    </div>
+                </div>
+
+                <div class="exhibit-item" id="exhibit-C">
+                    <div class="exhibit-header">
+                        <div class="exhibit-label">📄 Exhibit C</div>
+                        <div class="exhibit-page">Page 25</div>
+                    </div>
+                    <div class="exhibit-title">Email correspondence regarding contract terms</div>
+                    <div class="edit-controls">
+                        <a href="/online/pdf/sample-case-86/doc-86-exhibits#page=25" target="_blank" class="click-instruction" id="link-C">
+                            👆 Click to open PDF at page 25
+                        </a>
+                        <button class="edit-button" onclick="editPage('C', 25)">✏️ Edit Page</button>
+                    </div>
+                    <div class="edit-form" id="edit-form-C">
+                        <label style="font-weight: 600; color: #2E7D32;">📝 New Page Number:</label>
+                        <input type="number" class="page-input" id="page-input-C" min="1" max="86" value="25" placeholder="Page #">
+                        <button class="confirm-btn" onclick="confirmEdit('C')">✅ Update Link</button>
+                        <button class="cancel-btn" onclick="cancelEdit('C')">❌ Cancel</button>
+                    </div>
+                </div>
+
+                <div class="exhibit-item" id="exhibit-1">
+                    <div class="exhibit-header">
+                        <div class="exhibit-label">📄 Exhibit 1</div>
+                        <div class="exhibit-page">Page 31</div>
+                    </div>
+                    <div class="exhibit-title">Invoice #12345 dated March 15, 2023</div>
+                    <div class="edit-controls">
+                        <a href="/online/pdf/sample-case-86/doc-86-exhibits#page=31" target="_blank" class="click-instruction" id="link-1">
+                            👆 Click to open PDF at page 31
+                        </a>
+                        <button class="edit-button" onclick="editPage('1', 31)">✏️ Edit Page</button>
+                    </div>
+                    <div class="edit-form" id="edit-form-1">
+                        <label style="font-weight: 600; color: #2E7D32;">📝 New Page Number:</label>
+                        <input type="number" class="page-input" id="page-input-1" min="1" max="86" value="31" placeholder="Page #">
+                        <button class="confirm-btn" onclick="confirmEdit('1')">✅ Update Link</button>
+                        <button class="cancel-btn" onclick="cancelEdit('1')">❌ Cancel</button>
+                    </div>
+                </div>
+
+                <div class="exhibit-item" id="exhibit-2">
+                    <div class="exhibit-header">
+                        <div class="exhibit-label">📄 Exhibit 2</div>
+                        <div class="exhibit-page">Page 35</div>
+                    </div>
+                    <div class="exhibit-title">Receipt for payment of $50,000</div>
+                    <div class="edit-controls">
+                        <a href="/online/pdf/sample-case-86/doc-86-exhibits#page=35" target="_blank" class="click-instruction" id="link-2">
+                            👆 Click to open PDF at page 35
+                        </a>
+                        <button class="edit-button" onclick="editPage('2', 35)">✏️ Edit Page</button>
+                    </div>
+                    <div class="edit-form" id="edit-form-2">
+                        <label style="font-weight: 600; color: #2E7D32;">📝 New Page Number:</label>
+                        <input type="number" class="page-input" id="page-input-2" min="1" max="86" value="35" placeholder="Page #">
+                        <button class="confirm-btn" onclick="confirmEdit('2')">✅ Update Link</button>
+                        <button class="cancel-btn" onclick="cancelEdit('2')">❌ Cancel</button>
+                    </div>
+                </div>
+
+                <div class="exhibit-item" id="exhibit-D">
+                    <div class="exhibit-header">
+                        <div class="exhibit-label">📄 Exhibit D</div>
+                        <div class="exhibit-page">Page 42</div>
+                    </div>
+                    <div class="exhibit-title">Corporate bylaws and amendments</div>
+                    <div class="edit-controls">
+                        <a href="/online/pdf/sample-case-86/doc-86-exhibits#page=42" target="_blank" class="click-instruction" id="link-D">
+                            👆 Click to open PDF at page 42
+                        </a>
+                        <button class="edit-button" onclick="editPage('D', 42)">✏️ Edit Page</button>
+                    </div>
+                    <div class="edit-form" id="edit-form-D">
+                        <label style="font-weight: 600; color: #2E7D32;">📝 New Page Number:</label>
+                        <input type="number" class="page-input" id="page-input-D" min="1" max="86" value="42" placeholder="Page #">
+                        <button class="confirm-btn" onclick="confirmEdit('D')">✅ Update Link</button>
+                        <button class="cancel-btn" onclick="cancelEdit('D')">❌ Cancel</button>
+                    </div>
+                </div>
+
+                <div class="exhibit-item" id="exhibit-E">
+                    <div class="exhibit-header">
+                        <div class="exhibit-label">📄 Exhibit E</div>
+                        <div class="exhibit-page">Page 48</div>
+                    </div>
+                    <div class="exhibit-title">Bank statements from Chase Bank</div>
+                    <div class="edit-controls">
+                        <a href="/online/pdf/sample-case-86/doc-86-exhibits#page=48" target="_blank" class="click-instruction" id="link-E">
+                            👆 Click to open PDF at page 48
+                        </a>
+                        <button class="edit-button" onclick="editPage('E', 48)">✏️ Edit Page</button>
+                    </div>
+                    <div class="edit-form" id="edit-form-E">
+                        <label style="font-weight: 600; color: #2E7D32;">📝 New Page Number:</label>
+                        <input type="number" class="page-input" id="page-input-E" min="1" max="86" value="48" placeholder="Page #">
+                        <button class="confirm-btn" onclick="confirmEdit('E')">✅ Update Link</button>
+                        <button class="cancel-btn" onclick="cancelEdit('E')">❌ Cancel</button>
+                    </div>
+                </div>
+
+                <div class="exhibit-item" id="exhibit-3">
+                    <div class="exhibit-header">
+                        <div class="exhibit-label">📄 Exhibit 3</div>
+                        <div class="exhibit-page">Page 54</div>
+                    </div>
+                    <div class="exhibit-title">Property appraisal report</div>
+                    <div class="edit-controls">
+                        <a href="/online/pdf/sample-case-86/doc-86-exhibits#page=54" target="_blank" class="click-instruction" id="link-3">
+                            👆 Click to open PDF at page 54
+                        </a>
+                        <button class="edit-button" onclick="editPage('3', 54)">✏️ Edit Page</button>
+                    </div>
+                    <div class="edit-form" id="edit-form-3">
+                        <label style="font-weight: 600; color: #2E7D32;">📝 New Page Number:</label>
+                        <input type="number" class="page-input" id="page-input-3" min="1" max="86" value="54" placeholder="Page #">
+                        <button class="confirm-btn" onclick="confirmEdit('3')">✅ Update Link</button>
+                        <button class="cancel-btn" onclick="cancelEdit('3')">❌ Cancel</button>
+                    </div>
+                </div>
+
+                <div class="exhibit-item" id="exhibit-F">
+                    <div class="exhibit-header">
+                        <div class="exhibit-label">📄 Exhibit F</div>
+                        <div class="exhibit-page">Page 61</div>
+                    </div>
+                    <div class="exhibit-title">Insurance policy documentation</div>
+                    <div class="edit-controls">
+                        <a href="/online/pdf/sample-case-86/doc-86-exhibits#page=61" target="_blank" class="click-instruction" id="link-F">
+                            👆 Click to open PDF at page 61
+                        </a>
+                        <button class="edit-button" onclick="editPage('F', 61)">✏️ Edit Page</button>
+                    </div>
+                    <div class="edit-form" id="edit-form-F">
+                        <label style="font-weight: 600; color: #2E7D32;">📝 New Page Number:</label>
+                        <input type="number" class="page-input" id="page-input-F" min="1" max="86" value="61" placeholder="Page #">
+                        <button class="confirm-btn" onclick="confirmEdit('F')">✅ Update Link</button>
+                        <button class="cancel-btn" onclick="cancelEdit('F')">❌ Cancel</button>
+                    </div>
+                </div>
+
+                <div class="exhibit-item" id="exhibit-G">
+                    <div class="exhibit-header">
+                        <div class="exhibit-label">📄 Exhibit G</div>
+                        <div class="exhibit-page">Page 67</div>
+                    </div>
+                    <div class="exhibit-title">Tax returns for 2022-2023</div>
+                    <div class="edit-controls">
+                        <a href="/online/pdf/sample-case-86/doc-86-exhibits#page=67" target="_blank" class="click-instruction" id="link-G">
+                            👆 Click to open PDF at page 67
+                        </a>
+                        <button class="edit-button" onclick="editPage('G', 67)">✏️ Edit Page</button>
+                    </div>
+                    <div class="edit-form" id="edit-form-G">
+                        <label style="font-weight: 600; color: #2E7D32;">📝 New Page Number:</label>
+                        <input type="number" class="page-input" id="page-input-G" min="1" max="86" value="67" placeholder="Page #">
+                        <button class="confirm-btn" onclick="confirmEdit('G')">✅ Update Link</button>
+                        <button class="cancel-btn" onclick="cancelEdit('G')">❌ Cancel</button>
+                    </div>
+                </div>
+
+                <div class="exhibit-item" id="exhibit-4">
+                    <div class="exhibit-header">
+                        <div class="exhibit-label">📄 Exhibit 4</div>
+                        <div class="exhibit-page">Page 73</div>
+                    </div>
+                    <div class="exhibit-title">Contract addendum signed November 2023</div>
+                    <div class="edit-controls">
+                        <a href="/online/pdf/sample-case-86/doc-86-exhibits#page=73" target="_blank" class="click-instruction" id="link-4">
+                            👆 Click to open PDF at page 73
+                        </a>
+                        <button class="edit-button" onclick="editPage('4', 73)">✏️ Edit Page</button>
+                    </div>
+                    <div class="edit-form" id="edit-form-4">
+                        <label style="font-weight: 600; color: #2E7D32;">📝 New Page Number:</label>
+                        <input type="number" class="page-input" id="page-input-4" min="1" max="86" value="73" placeholder="Page #">
+                        <button class="confirm-btn" onclick="confirmEdit('4')">✅ Update Link</button>
+                        <button class="cancel-btn" onclick="cancelEdit('4')">❌ Cancel</button>
+                    </div>
+                </div>
+
+                <div class="exhibit-item" id="exhibit-H">
+                    <div class="exhibit-header">
+                        <div class="exhibit-label">📄 Exhibit H</div>
+                        <div class="exhibit-page">Page 79</div>
+                    </div>
+                    <div class="exhibit-title">Legal opinion letter from counsel</div>
+                    <div class="edit-controls">
+                        <a href="/online/pdf/sample-case-86/doc-86-exhibits#page=79" target="_blank" class="click-instruction" id="link-H">
+                            👆 Click to open PDF at page 79
+                        </a>
+                        <button class="edit-button" onclick="editPage('H', 79)">✏️ Edit Page</button>
+                    </div>
+                    <div class="edit-form" id="edit-form-H">
+                        <label style="font-weight: 600; color: #2E7D32;">📝 New Page Number:</label>
+                        <input type="number" class="page-input" id="page-input-H" min="1" max="86" value="79" placeholder="Page #">
+                        <button class="confirm-btn" onclick="confirmEdit('H')">✅ Update Link</button>
+                        <button class="cancel-btn" onclick="cancelEdit('H')">❌ Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p><strong>💡 Professional Legal Document Management:</strong> All hyperlinks automatically open PDFs at exact page numbers</p>
+            <p>Generated by HyperlinkLaw.com • Automated Legal Document Hyperlinking System</p>
+            <p><strong>Complete Index:</strong> 12 clickable exhibit hyperlinks • Letters: A-H • Numbers: 1-4</p>
+            <p style="font-size: 0.9em; color: #888; margin-top: 10px;">Document: 86 pages • Case: sample-case-86 • Doc ID: doc-86-exhibits</p>
+        </div>
+    </div>
+
+    <script>
+        window.currentDocumentId = 'doc-86-exhibits';
+        window.currentCaseId = 'sample-case-86';
+        
+        window.editPage = function(exhibitLabel, currentPage) {
+            console.log('🎯 Edit button clicked for Exhibit ' + exhibitLabel);
+            var allForms = document.querySelectorAll('.edit-form');
+            for (var i = 0; i < allForms.length; i++) {
+                allForms[i].classList.remove('active');
+            }
+            var editForm = document.getElementById('edit-form-' + exhibitLabel);
+            if (editForm) {
+                editForm.classList.add('active');
+                setTimeout(function() {
+                    var input = document.getElementById('page-input-' + exhibitLabel);
+                    if (input) {
+                        input.focus();
+                        input.select();
+                    }
+                }, 150);
+            }
+        };
+        
+        window.cancelEdit = function(exhibitLabel) {
+            var editForm = document.getElementById('edit-form-' + exhibitLabel);
+            if (editForm) {
+                editForm.classList.remove('active');
+            }
+        };
+        
+        window.confirmEdit = function(exhibitLabel) {
+            var input = document.getElementById('page-input-' + exhibitLabel);
+            var newPage = parseInt(input.value);
+            
+            if (!newPage || newPage < 1 || newPage > 86) {
+                alert('Please enter a valid page number between 1 and 86');
+                return;
+            }
+            
+            var editForm = document.getElementById('edit-form-' + exhibitLabel);
+            editForm.innerHTML = '<div style="background: #2196F3; color: white; padding: 5px 10px; border-radius: 4px; font-size: 0.8em;">🔄 Updating exhibit hyperlink...</div>';
+            
+            fetch('/api/documents/' + window.currentDocumentId + '/update-exhibit-page', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    exhibitLabel: exhibitLabel,
+                    newPage: newPage,
+                    caseId: window.currentCaseId
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    var link = document.getElementById('link-' + exhibitLabel);
+                    var pageDisplay = document.querySelector('#exhibit-' + exhibitLabel + ' .exhibit-page');
+                    
+                    if (link && pageDisplay) {
+                        link.href = '/online/pdf/sample-case-86/doc-86-exhibits#page=' + newPage;
+                        link.textContent = '👆 Click to open PDF at page ' + newPage;
+                        pageDisplay.textContent = 'Page ' + newPage;
+                    }
+                    
+                    editForm.classList.remove('active');
+                    editForm.innerHTML = '<label style="font-weight: 600; color: #2E7D32;">📝 New Page Number:</label><input type="number" class="page-input" id="page-input-' + exhibitLabel + '" min="1" max="86" value="' + newPage + '" placeholder="Page #"><button class="confirm-btn" onclick="confirmEdit('' + exhibitLabel + '')">>✅ Update Link</button><button class="cancel-btn" onclick="cancelEdit('' + exhibitLabel + '')">>❌ Cancel</button>';
+                } else {
+                    alert('Error updating exhibit: ' + (data.message || 'Unknown error'));
+                    editForm.classList.remove('active');
+                }
+            })
+            .catch(error => {
+                alert('Error updating exhibit: ' + error.message);
+                editForm.classList.remove('active');
+            });
+        };
+        
+        window.testEditButton = function() {
+            console.log('🧪 Test function called - JavaScript is working!');
+            alert('✅ JavaScript is working! All exhibit edit buttons are ready to use.
+
+You can now edit page numbers for any of the ' + 12 + ' exhibits.');
+        };
+        
+        console.log('🚀 Complete exhibit edit functionality loaded successfully');
+        console.log('📄 Document ID: ' + window.currentDocumentId);
+        console.log('📁 Case ID: ' + window.currentCaseId);
+        console.log('📋 Total exhibits: ' + 12);
+        console.log('📋 Exhibit labels: A, B, C, 1, 2, D, E, 3, F, G, 4, H');
+    </script>
+</body>
+</html>

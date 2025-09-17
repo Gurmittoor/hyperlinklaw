@@ -1,0 +1,284 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: hsl(222, 84%, 5%);
+  --foreground: hsl(210, 40%, 98%);
+  --card: hsl(217, 33%, 17%);
+  --card-foreground: hsl(210, 40%, 98%);
+  --popover: hsl(217, 33%, 17%);
+  --popover-foreground: hsl(210, 40%, 98%);
+  --primary: hsl(217, 91%, 60%);
+  --primary-foreground: hsl(222, 84%, 5%);
+  --secondary: hsl(217, 19%, 27%);
+  --secondary-foreground: hsl(210, 40%, 98%);
+  --muted: hsl(215, 19%, 25%);
+  --muted-foreground: hsl(217, 15%, 45%);
+  --accent: hsl(217, 19%, 27%);
+  --accent-foreground: hsl(210, 40%, 98%);
+  --destructive: hsl(0, 63%, 31%);
+  --destructive-foreground: hsl(210, 40%, 98%);
+  --border: hsl(217, 19%, 27%);
+  --input: hsl(217, 19%, 27%);
+  --ring: hsl(217, 91%, 60%);
+  --radius: 8px;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-serif: Georgia, serif;
+  --font-mono: Menlo, monospace;
+}
+
+.dark {
+  --background: hsl(222, 84%, 5%);
+  --foreground: hsl(210, 40%, 98%);
+  --card: hsl(217, 33%, 17%);
+  --card-foreground: hsl(210, 40%, 98%);
+  --popover: hsl(217, 33%, 17%);
+  --popover-foreground: hsl(210, 40%, 98%);
+  --primary: hsl(217, 91%, 60%);
+  --primary-foreground: hsl(222, 84%, 5%);
+  --secondary: hsl(217, 19%, 27%);
+  --secondary-foreground: hsl(210, 40%, 98%);
+  --muted: hsl(215, 19%, 25%);
+  --muted-foreground: hsl(217, 15%, 45%);
+  --accent: hsl(217, 19%, 27%);
+  --accent-foreground: hsl(210, 40%, 98%);
+  --destructive: hsl(0, 63%, 31%);
+  --destructive-foreground: hsl(210, 40%, 98%);
+  --border: hsl(217, 19%, 27%);
+  --input: hsl(217, 19%, 27%);
+  --ring: hsl(217, 91%, 60%);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+  }
+}
+
+@layer components {
+  .upload-area {
+    background: linear-gradient(135deg, hsl(217, 33%, 17%) 0%, hsl(215, 19%, 25%) 100%);
+    border: 2px dashed hsl(217, 91%, 60%);
+  }
+  
+  .upload-area:hover {
+    border-color: hsl(217, 91%, 70%);
+    background: linear-gradient(135deg, hsl(217, 33%, 20%) 0%, hsl(215, 19%, 28%) 100%);
+  }
+  
+  .progress-bar {
+    background: linear-gradient(90deg, hsl(217, 91%, 60%) 0%, hsl(142, 71%, 45%) 100%);
+  }
+  
+  .table-hover:hover {
+    background-color: hsl(217, 19%, 27%);
+  }
+  
+  .status-pending { 
+    background-color: hsl(43, 96%, 56%); 
+    color: hsl(222, 84%, 5%); 
+  }
+  
+  .status-processing { 
+    background-color: hsl(217, 91%, 60%); 
+    color: hsl(210, 40%, 98%); 
+  }
+  
+  .status-review { 
+    background-color: hsl(262, 83%, 58%); 
+    color: hsl(210, 40%, 98%); 
+  }
+  
+  .status-approved { 
+    background-color: hsl(142, 71%, 45%); 
+    color: hsl(210, 40%, 98%); 
+  }
+  
+  .status-failed { 
+    background-color: hsl(0, 63%, 31%); 
+    color: hsl(210, 40%, 98%); 
+  }
+  
+  .animate-pulse-fast { 
+    animation: pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite; 
+  }
+  
+  .link-annotation {
+    border: 1px solid hsl(217, 91%, 60%);
+    background-color: hsla(217, 91%, 60%, 0.1);
+  }
+  
+  .link-annotation:hover {
+    background-color: hsla(217, 91%, 60%, 0.2);
+  }
+}
+
+/* Mobile-first responsive design */
+@media (max-width: 768px) {
+  .pdf-viewer {
+    width: 100% !important;
+    height: 400px !important;
+    min-height: 400px;
+  }
+  
+  .sidebar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    max-height: 50vh;
+    z-index: 50;
+    background: var(--background);
+    border-top: 1px solid var(--border);
+  }
+  
+  .desktop-layout {
+    flex-direction: column;
+  }
+  
+  .mobile-controls {
+    padding: 1rem;
+    border-top: 1px solid var(--border);
+  }
+  
+  .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  
+  .nav-menu {
+    flex-direction: column;
+    position: fixed;
+    top: 60px;
+    left: 0;
+    right: 0;
+    background: var(--background);
+    border-bottom: 1px solid var(--border);
+  }
+}
+
+/* Accessibility improvements */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  :root {
+    --foreground: #000;
+    --background: #fff;
+    --border: #000;
+    --muted-foreground: #333;
+  }
+  
+  .dark {
+    --foreground: #fff;
+    --background: #000;
+    --border: #fff;
+    --muted-foreground: #ccc;
+  }
+}
+
+/* Enhanced contrast for better readability */
+.text-contrast {
+  @apply text-black bg-white/90 px-2 py-1 rounded;
+}
+
+.text-contrast-dark {
+  @apply text-white bg-gray-800/90 px-2 py-1 rounded;
+}
+
+/* Focus improvements for keyboard navigation */
+.focus-visible:focus {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+/* Loading states */
+.loading-shimmer {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* PDF Canvas responsive sizing safeguard */
+canvas {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+/* Print styles */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  
+  .print-friendly {
+    background: white !important;
+    color: black !important;
+  }
+}
+
+/* Left Panel Scrollbar Styling - Professional appearance matching PDF viewer */
+#left-panel-scroll::-webkit-scrollbar {
+  width: 8px;
+}
+
+#left-panel-scroll::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+#left-panel-scroll::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+#left-panel-scroll::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* HTML Overlay Links for Page 2 PDF Navigation */
+.hl-overlay-link {
+  position: absolute;
+  font: 600 12px/1.2 "Helvetica Neue", Arial, sans-serif;
+  color: #1a56db;
+  text-decoration: underline;
+  pointer-events: auto;
+  user-select: none;
+  background: transparent;
+  z-index: 50; /* above textLayer/canvas */
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.hl-overlay-link:hover {
+  color: #0f3bb8;
+  text-decoration: underline;
+}
+
+.hl-overlay-layer {
+  position: absolute; 
+  inset: 0; 
+  pointer-events: none; 
+  z-index: 40;
+}

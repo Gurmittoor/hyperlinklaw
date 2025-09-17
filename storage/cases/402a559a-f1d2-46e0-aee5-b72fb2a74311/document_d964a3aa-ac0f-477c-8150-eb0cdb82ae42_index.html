@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clickable Index - Trial Record - Ferrante - August 13 2025</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0 0 10px 0;
+            font-size: 2.5em;
+            font-weight: 300;
+        }
+        .header p {
+            margin: 0;
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        .content {
+            padding: 40px;
+        }
+        .intro {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px;
+            background: #f8f9ff;
+            border-radius: 10px;
+            border-left: 5px solid #2a5298;
+        }
+        .intro h2 {
+            color: #1e3c72;
+            margin-bottom: 15px;
+            font-size: 1.8em;
+        }
+        .intro p {
+            color: #666;
+            font-size: 1.1em;
+            margin: 10px 0;
+        }
+        .tabs-grid {
+            display: grid;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        .tab-item {
+            display: block;
+            text-decoration: none;
+            background: white;
+            border: 2px solid #e1e8ff;
+            border-radius: 10px;
+            padding: 20px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .tab-item:hover {
+            border-color: #2a5298;
+            box-shadow: 0 8px 25px rgba(42,82,152,0.15);
+            transform: translateY(-2px);
+        }
+        .tab-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .tab-number {
+            background: linear-gradient(135deg, #2a5298, #1e3c72);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 25px;
+            font-weight: bold;
+            font-size: 0.9em;
+            margin-right: 15px;
+            min-width: 60px;
+            text-align: center;
+        }
+        .tab-date {
+            color: #666;
+            font-size: 0.95em;
+            font-weight: 500;
+        }
+        .tab-nature {
+            color: #333;
+            font-size: 1.1em;
+            font-weight: 600;
+            line-height: 1.4;
+        }
+        .click-instruction {
+            display: inline-block;
+            background: #e8f4fd;
+            color: #1976d2;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            margin-top: 8px;
+            font-weight: 500;
+        }
+        .edit-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+            justify-content: space-between;
+        }
+        .edit-button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 15px;
+            font-size: 0.85em;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            box-shadow: 0 2px 6px rgba(76, 175, 80, 0.3);
+        }
+        .edit-button:hover {
+            background: #45a049;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(76, 175, 80, 0.4);
+        }
+        .edit-form {
+            display: none;
+            align-items: center;
+            gap: 12px;
+            margin-top: 15px;
+            padding: 15px;
+            background: #f0f8ff;
+            border-radius: 10px;
+            border: 2px solid #4CAF50;
+            box-shadow: 0 4px 12px rgba(76, 175, 80, 0.2);
+            animation: slideDown 0.3s ease-out;
+        }
+        .edit-form.active {
+            display: flex;
+        }
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .page-input {
+            width: 80px;
+            padding: 8px 12px;
+            border: 2px solid #4CAF50;
+            border-radius: 6px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 1em;
+            background: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .page-input:focus {
+            outline: none;
+            border-color: #45a049;
+            box-shadow: 0 0 8px rgba(76, 175, 80, 0.3);
+        }
+        .confirm-btn {
+            background: #4caf50;
+            color: white;
+            border: none;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 0.8em;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        .confirm-btn:hover {
+            background: #45a049;
+        }
+        .cancel-btn {
+            background: #f44336;
+            color: white;
+            border: none;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 0.8em;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        .cancel-btn:hover {
+            background: #da190b;
+        }
+        .nav-button {
+            background: #2196F3;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            margin: 0 8px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(33, 150, 243, 0.3);
+        }
+        .nav-button:hover {
+            background: #1976D2;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(33, 150, 243, 0.4);
+        }
+        .nav-button.refresh {
+            background: #4CAF50;
+            box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+        }
+        .nav-button.refresh:hover {
+            background: #45a049;
+            box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+        }
+        .updating {
+            background: #2196F3;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 0.8em;
+        }
+        .footer {
+            text-align: center;
+            padding: 30px;
+            background: #f8f9ff;
+            color: #666;
+            border-top: 1px solid #e1e8ff;
+        }
+        .footer p {
+            margin: 5px 0;
+            font-size: 0.9em;
+        }
+        @media (max-width: 768px) {
+            body { padding: 20px; }
+            .header { padding: 30px 20px; }
+            .content { padding: 30px 20px; }
+            .header h1 { font-size: 2em; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📋 Clickable Document Index</h1>
+            <p>Trial Record - Ferrante - August 13 2025</p>
+        </div>
+        
+        <div class="content">
+            <div class="intro">
+                <h2>🎯 How to Use This Index</h2>
+                <p><strong>Click any tab below</strong> to instantly open the PDF at that exact page in a new browser tab.</p>
+                <p>Each link opens the PDF at the specific page containing that document.</p>
+                <p><em>🔗 Links open in new tabs - use your browser's back button or close the tab to return here</em></p>
+                <div style="margin: 20px 0; padding: 15px; background: #e8f4fd; border-radius: 8px; border-left: 4px solid #2196F3;">
+                    <p style="margin: 0; color: #1976D2;"><strong>💡 Navigation Tip:</strong> After clicking a link, you can:</p>
+                    <ul style="margin: 10px 0 0 20px; color: #1976D2;">
+                        <li>Use <kbd>Ctrl+W</kbd> (or <kbd>Cmd+W</kbd>) to close the PDF tab</li>
+                        <li>Click your browser's back button</li>
+                        <li>Bookmark this page for quick access</li>
+                    </ul>
+                </div>
+                <div style="margin-top: 15px; text-align: center;">
+                    <button onclick="testEditButton()" style="background: #ff9800; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold;">
+                        🧪 Test JavaScript (Click Me First!)
+                    </button>
+                    <p style="font-size: 0.9em; color: #666; margin-top: 8px;">
+                        Click this button to verify JavaScript is working before using edit buttons
+                    </p>
+                </div>
+            </div>
+            
+            <div class="tabs-grid">
+                
+                    <div class="tab-item" id="tab-1">
+                        <div class="tab-header">
+                            <div class="tab-number">Tab 1</div>
+                            <div class="tab-date">Trial Document</div>
+                        </div>
+                        <div class="tab-nature">Pleadings – Application, Fresh as Amended Answer and Reply</div>
+                        <div class="edit-controls">
+                            <a href="/online/pdf/402a559a-f1d2-46e0-aee5-b72fb2a74311/d964a3aa-ac0f-477c-8150-eb0cdb82ae42#page=10" target="_blank" class="click-instruction" id="link-1">
+                                👆 Click to open PDF at page 10
+                            </a>
+                            <button class="edit-button" onclick="editPage(1, 10)">✏️ Edit Page</button>
+                        </div>
+                        <div class="edit-form" id="edit-form-1">
+                            <label style="font-weight: 600; color: #2E7D32;">📝 New Page Number:</label>
+                            <input type="number" class="page-input" id="page-input-1" min="1" max="1223" value="10" placeholder="Page #">
+                            <button class="confirm-btn" onclick="confirmEdit(1)">✅ Update Link</button>
+                            <button class="cancel-btn" onclick="cancelEdit(1)">❌ Cancel</button>
+                        </div>
+                    </div>
+                
+                    <div class="tab-item" id="tab-2">
+                        <div class="tab-header">
+                            <div class="tab-number">Tab 2</div>
+                            <div class="tab-date">Financial Records</div>
+                        </div>
+                        <div class="tab-nature">Subrule 13 documents – Sworn Financial Statements</div>
+                        <div class="edit-controls">
+                            <a href="/online/pdf/402a559a-f1d2-46e0-aee5-b72fb2a74311/d964a3aa-ac0f-477c-8150-eb0cdb82ae42#page=50" target="_blank" class="click-instruction" id="link-2">
+                                👆 Click to open PDF at page 50
+                            </a>
+                            <button class="edit-button" onclick="editPage(2, 50)">✏️ Edit Page</button>
+                        </div>
+                        <div class="edit-form" id="edit-form-2">
+                            <label style="font-weight: 600; color: #2E7D32;">📝 New Page Number:</label>
+                            <input type="number" class="page-input" id="page-input-2" min="1" max="1223" value="50" placeholder="Page #">
+                            <button class="confirm-btn" onclick="confirmEdit(2)">✅ Update Link</button>
+                            <button class="cancel-btn" onclick="cancelEdit(2)">❌ Cancel</button>
+                        </div>
+                    </div>
+                
+                    <div class="tab-item" id="tab-3">
+                        <div class="tab-header">
+                            <div class="tab-number">Tab 3</div>
+                            <div class="tab-date">Examination Transcript</div>
+                        </div>
+                        <div class="tab-nature">Transcript on which we intend to rely – Rino Ferrante's Transcript - Examination</div>
+                        <div class="edit-controls">
+                            <a href="/online/pdf/402a559a-f1d2-46e0-aee5-b72fb2a74311/d964a3aa-ac0f-477c-8150-eb0cdb82ae42#page=100" target="_blank" class="click-instruction" id="link-3">
+                                👆 Click to open PDF at page 100
+                            </a>
+                            <button class="edit-button" onclick="editPage(3, 100)">✏️ Edit Page</button>
+                        </div>
+                        <div class="edit-form" id="edit-form-3">
+                            <label style="font-weight: 600; color: #2E7D32;">📝 New Page Number:</label>
+                            <input type="number" class="page-input" id="page-input-3" min="1" max="1223" value="100" placeholder="Page #">
+                            <button class="confirm-btn" onclick="confirmEdit(3)">✅ Update Link</button>
+                            <button class="cancel-btn" onclick="cancelEdit(3)">❌ Cancel</button>
+                        </div>
+                    </div>
+                
+                    <div class="tab-item" id="tab-4">
+                        <div class="tab-header">
+                            <div class="tab-number">Tab 4</div>
+                            <div class="tab-date">Court Orders</div>
+                        </div>
+                        <div class="tab-nature">Temporary Orders and Order relating to the trial</div>
+                        <div class="edit-controls">
+                            <a href="/online/pdf/402a559a-f1d2-46e0-aee5-b72fb2a74311/d964a3aa-ac0f-477c-8150-eb0cdb82ae42#page=200" target="_blank" class="click-instruction" id="link-4">
+                                👆 Click to open PDF at page 200
+                            </a>
+                            <button class="edit-button" onclick="editPage(4, 200)">✏️ Edit Page</button>
+                        </div>
+                        <div class="edit-form" id="edit-form-4">
+                            <label style="font-weight: 600; color: #2E7D32;">📝 New Page Number:</label>
+                            <input type="number" class="page-input" id="page-input-4" min="1" max="1223" value="200" placeholder="Page #">
+                            <button class="confirm-btn" onclick="confirmEdit(4)">✅ Update Link</button>
+                            <button class="cancel-btn" onclick="cancelEdit(4)">❌ Cancel</button>
+                        </div>
+                    </div>
+                
+                    <div class="tab-item" id="tab-5">
+                        <div class="tab-header">
+                            <div class="tab-number">Tab 5</div>
+                            <div class="tab-date">Scheduling Document</div>
+                        </div>
+                        <div class="tab-nature">Trial Scheduling Endorsement Form</div>
+                        <div class="edit-controls">
+                            <a href="/online/pdf/402a559a-f1d2-46e0-aee5-b72fb2a74311/d964a3aa-ac0f-477c-8150-eb0cdb82ae42#page=300" target="_blank" class="click-instruction" id="link-5">
+                                👆 Click to open PDF at page 300
+                            </a>
+                            <button class="edit-button" onclick="editPage(5, 300)">✏️ Edit Page</button>
+                        </div>
+                        <div class="edit-form" id="edit-form-5">
+                            <label style="font-weight: 600; color: #2E7D32;">📝 New Page Number:</label>
+                            <input type="number" class="page-input" id="page-input-5" min="1" max="1223" value="300" placeholder="Page #">
+                            <button class="confirm-btn" onclick="confirmEdit(5)">✅ Update Link</button>
+                            <button class="cancel-btn" onclick="cancelEdit(5)">❌ Cancel</button>
+                        </div>
+                    </div>
+                
+            </div>
+        </div>
+        
+        <div class="footer">
+            <div style="text-align: center; margin-bottom: 20px;">
+                <button onclick="window.history.back()" class="nav-button">
+                    ← Back to Previous Page
+                </button>
+                <button onclick="window.location.reload()" class="nav-button refresh">
+                    🔄 Refresh Index
+                </button>
+            </div>
+            <p><strong>💡 Tip:</strong> Bookmark this page for quick access to your document index</p>
+            <p>Generated by HyperlinkLaw.com • Professional Legal Document Management</p>
+            <p><small>Total: 5 clickable document references</small></p>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        window.currentDocumentId = 'd964a3aa-ac0f-477c-8150-eb0cdb82ae42';
+        window.currentCaseId = '402a559a-f1d2-46e0-aee5-b72fb2a74311';
+        
+        // Edit page function
+        window.editPage = function(tabNo, currentPage) {
+            console.log('🎯 Edit button clicked for Tab ' + tabNo);
+            
+            // Hide all edit forms first
+            var allForms = document.querySelectorAll('.edit-form');
+            for (var i = 0; i < allForms.length; i++) {
+                allForms[i].classList.remove('active');
+            }
+            
+            // Show this edit form
+            var editForm = document.getElementById('edit-form-' + tabNo);
+            if (editForm) {
+                editForm.classList.add('active');
+                console.log('✅ Edit form shown for Tab ' + tabNo);
+                
+                // Focus on input after short delay
+                setTimeout(function() {
+                    var input = document.getElementById('page-input-' + tabNo);
+                    if (input) {
+                        input.focus();
+                        input.select();
+                        console.log('📝 Input focused for Tab ' + tabNo);
+                    }
+                }, 150);
+            } else {
+                console.error('❌ Edit form not found for Tab ' + tabNo);
+            }
+        };
+        
+        // Cancel edit function
+        window.cancelEdit = function(tabNo) {
+            console.log('❌ Cancel button clicked for Tab ' + tabNo);
+            var editForm = document.getElementById('edit-form-' + tabNo);
+            if (editForm) {
+                editForm.classList.remove('active');
+                console.log('✅ Edit form hidden for Tab ' + tabNo);
+            }
+        };
+        
+        // Confirm edit function
+        window.confirmEdit = function(tabNo) {
+            console.log('✅ Confirm button clicked for Tab ' + tabNo);
+            
+            var input = document.getElementById('page-input-' + tabNo);
+            var newPage = parseInt(input.value);
+            
+            console.log('📝 New page value: ' + newPage);
+            
+            if (!newPage || newPage < 1) {
+                alert('Please enter a valid page number');
+                return;
+            }
+            
+            // Show updating status
+            var editForm = document.getElementById('edit-form-' + tabNo);
+            editForm.innerHTML = '<div class="updating">🔄 Updating hyperlink...</div>';
+            
+            // Make API call
+            fetch('/api/documents/' + window.currentDocumentId + '/update-tab-page', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    tabNo: tabNo,
+                    newPage: newPage,
+                    caseId: window.currentCaseId
+                })
+            })
+            .then(function(response) {
+                console.log('📡 API response status: ' + response.status);
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error('API returned status ' + response.status);
+                }
+            })
+            .then(function(result) {
+                console.log('✅ API response: ' + JSON.stringify(result));
+                
+                // Update the link immediately
+                var link = document.getElementById('link-' + tabNo);
+                var newHref = '/online/pdf/402a559a-f1d2-46e0-aee5-b72fb2a74311/d964a3aa-ac0f-477c-8150-eb0cdb82ae42#page=' + newPage;
+                link.href = newHref;
+                link.innerHTML = '👆 Click to open PDF at page ' + newPage;
+                
+                console.log('🔗 Link updated to: ' + newHref);
+                
+                // Hide edit form and restore it
+                editForm.classList.remove('active');
+                editForm.innerHTML = 
+                    '<label style="font-weight: 600; color: #2E7D32;">📝 New Page Number:</label>' +
+                    '<input type="number" class="page-input" id="page-input-' + tabNo + '" min="1" max="1223" value="' + newPage + '" placeholder="Page #">' +
+                    '<button class="confirm-btn" onclick="confirmEdit(' + tabNo + ')">✅ Update Link</button>' +
+                    '<button class="cancel-btn" onclick="cancelEdit(' + tabNo + ')">❌ Cancel</button>';
+                
+                // Show success message
+                var successMsg = document.createElement('div');
+                successMsg.className = 'updating';
+                successMsg.style.background = '#4caf50';
+                successMsg.innerHTML = '✅ Hyperlink updated!';
+                editForm.parentNode.appendChild(successMsg);
+                
+                setTimeout(function() {
+                    if (successMsg.parentNode) {
+                        successMsg.parentNode.removeChild(successMsg);
+                    }
+                }, 2000);
+                
+                console.log('🎉 Tab update completed successfully!');
+            })
+            .catch(function(error) {
+                console.error('❌ Error updating tab: ' + error.message);
+                
+                // Show error and restore form
+                editForm.innerHTML = 
+                    '<div style="color: red; font-size: 0.9em; margin-bottom: 8px;">❌ Update failed. Try again.</div>' +
+                    '<label style="font-weight: 600; color: #2E7D32;">📝 New Page Number:</label>' +
+                    '<input type="number" class="page-input" id="page-input-' + tabNo + '" min="1" max="1223" value="' + newPage + '" placeholder="Page #">' +
+                    '<button class="confirm-btn" onclick="confirmEdit(' + tabNo + ')">✅ Update Link</button>' +
+                    '<button class="cancel-btn" onclick="cancelEdit(' + tabNo + ')">❌ Cancel</button>';
+            });
+        };
+        
+        // Enter key support
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && e.target.classList.contains('page-input')) {
+                var tabNo = e.target.id.replace('page-input-', '');
+                window.confirmEdit(parseInt(tabNo));
+            }
+        });
+        
+        // Test function to verify JavaScript is working
+        console.log('🚀 Edit functionality loaded successfully');
+        console.log('📄 Document ID: ' + window.currentDocumentId);
+        console.log('📁 Case ID: ' + window.currentCaseId);
+        
+        // Add click test function for debugging
+        window.testEditButton = function() {
+            console.log('🧪 Test function called - JavaScript is working!');
+            alert('JavaScript is working! Edit buttons should work now.');
+        };
+        
+        // Test that edit functions are properly loaded
+        console.log('📋 Functions available:', {
+            editPage: typeof window.editPage,
+            confirmEdit: typeof window.confirmEdit,
+            cancelEdit: typeof window.cancelEdit,
+            testEditButton: typeof window.testEditButton
+        });
+    </script>
+</body>
+</html>

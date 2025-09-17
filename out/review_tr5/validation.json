@@ -1,0 +1,11 @@
+{
+  "success": true,
+  "expected_tabs": 5,
+  "actual_tabs": 5,
+  "broken_links": 0,
+  "validation_passed": true,
+  "index_pages_scanned": [
+    2
+  ],
+  "document_type": "trial_record"
+}

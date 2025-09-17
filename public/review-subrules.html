@@ -1,0 +1,55 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<title>Review: 13 Subrule Documents</title>
+<style>
+ body{font-family:system-ui,Arial;background:#0f172a;color:#e2e8f0;margin:0;padding:20px}
+ .row{display:flex;justify-content:space-between;align-items:center;background:#111827;border:1px solid #374151;border-radius:10px;padding:10px;margin:8px 0}
+ .btn{padding:6px 10px;border-radius:8px;border:1px solid #334155;background:#0b3b2a;color:#e2e8f0;cursor:pointer}
+ input{width:90px;padding:6px;border-radius:8px;border:1px solid #334155;background:#0b0f19;color:#e2e8f0}
+ a{color:#93c5fd}
+ .btn:hover{background:#0f4f3a}
+</style>
+</head>
+<body>
+  <h1>Trial Record — <span id="count">…</span> Subrule Documents</h1>
+  <p><a id="pdf" href="#" target="_blank">Open Trial Record with Index</a></p>
+  <div id="list"></div>
+<script>
+async function load(){
+  const r = await fetch("/api/review-subrules").then(r=>r.json());
+  document.getElementById("count").textContent = r.total;
+  document.getElementById("pdf").href = r.pdfUrl;
+  const list = document.getElementById("list");
+  list.innerHTML = "";
+  r.links.forEach(x=>{
+    const div = document.createElement("div");
+    div.className="row";
+    div.innerHTML = `
+      <div>
+        <b>Subrule Doc ${x.doc_number}</b> → TR p.${x.tr_page}
+        &nbsp; <a href="${r.pdfUrl}#page=1" target="_blank">open index</a>
+        &nbsp; | &nbsp; <a href="${r.pdfUrl}#page=${x.tr_page}" target="_blank">open dest</a>
+      </div>
+      <div>
+        <input id="p${x.doc_number}" type="number" min="1" placeholder="TR page"/>
+        <button class="btn" onclick="save(${x.doc_number})">Save</button>
+      </div>`;
+    list.appendChild(div);
+  });
+}
+async function save(docNum){
+  const v = Number((document.getElementById("p"+docNum).value||"").trim());
+  if(!v) return alert("Enter a TR page number");
+  const r = await fetch("/api/review-subrules/override", {
+    method:"POST", headers:{ "Content-Type":"application/json" },
+    body: JSON.stringify({ doc_number: docNum, tr_page: v })
+  }).then(r=>r.json());
+  if(!r.ok) return alert("Override failed: " + (r.error||""));
+  alert("Updated and relinked"); load();
+}
+load();
+</script>
+</body>
+</html>

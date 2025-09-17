@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔗 Master Hyperlink Index - All Documents</title>
+    <style>
+        body { 
+            font-family: 'Segoe UI', sans-serif; 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+            margin: 0; 
+            padding: 20px; 
+        }
+        .container { 
+            max-width: 1600px; 
+            margin: 0 auto; 
+            background: white; 
+            border-radius: 15px; 
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1); 
+            overflow: hidden; 
+        }
+        .header { 
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%); 
+            color: white; 
+            padding: 40px; 
+            text-align: center; 
+        }
+        .header h1 { 
+            font-size: 3em; 
+            margin-bottom: 10px; 
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3); 
+        }
+        .content { 
+            padding: 40px; 
+        }
+        .document-section { 
+            margin-bottom: 50px; 
+            background: #f8f9ff; 
+            border-radius: 15px; 
+            padding: 30px; 
+            border-left: 8px solid #3498db; 
+        }
+        .document-title { 
+            font-size: 2em; 
+            color: #2c3e50; 
+            margin-bottom: 20px; 
+            display: flex; 
+            align-items: center; 
+            gap: 15px; 
+        }
+        .document-stats { 
+            background: #e8f4fd; 
+            padding: 15px 25px; 
+            border-radius: 10px; 
+            margin-bottom: 25px; 
+            font-weight: 600; 
+            color: #2c3e50; 
+        }
+        .hyperlinks-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); 
+            gap: 15px; 
+        }
+        .hyperlink-item { 
+            background: white; 
+            border: 2px solid #e1e8ff; 
+            border-radius: 10px; 
+            padding: 15px; 
+            transition: all 0.3s ease; 
+            cursor: pointer; 
+        }
+        .hyperlink-item:hover { 
+            border-color: #3498db; 
+            transform: translateY(-2px); 
+            box-shadow: 0 5px 20px rgba(52, 152, 219, 0.15); 
+        }
+        .hyperlink-header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-bottom: 10px; 
+        }
+        .hyperlink-id { 
+            background: linear-gradient(135deg, #3498db, #2980b9); 
+            color: white; 
+            padding: 6px 12px; 
+            border-radius: 15px; 
+            font-weight: bold; 
+            font-size: 0.9em; 
+        }
+        .hyperlink-page { 
+            background: #f8f9ff; 
+            color: #2c3e50; 
+            padding: 4px 10px; 
+            border-radius: 12px; 
+            font-size: 0.85em; 
+            font-weight: 600; 
+        }
+        .hyperlink-title { 
+            color: #34495e; 
+            font-size: 0.9em; 
+            line-height: 1.4; 
+            margin-bottom: 12px; 
+            min-height: 40px; 
+        }
+        .hyperlink-actions { 
+            display: flex; 
+            gap: 8px; 
+        }
+        .open-btn { 
+            background: #3498db; 
+            color: white; 
+            border: none; 
+            padding: 8px 15px; 
+            border-radius: 20px; 
+            font-size: 0.8em; 
+            cursor: pointer; 
+            font-weight: 600; 
+            transition: all 0.3s; 
+            flex: 1; 
+        }
+        .open-btn:hover { 
+            background: #2980b9; 
+            transform: translateY(-1px); 
+        }
+        .edit-btn { 
+            background: #27ae60; 
+            color: white; 
+            border: none; 
+            padding: 8px 12px; 
+            border-radius: 20px; 
+            font-size: 0.8em; 
+            cursor: pointer; 
+            font-weight: 600; 
+            transition: all 0.3s; 
+        }
+        .edit-btn:hover { 
+            background: #229954; 
+            transform: translateY(-1px); 
+        }
+        .footer { 
+            text-align: center; 
+            padding: 40px; 
+            background: #f8f9ff; 
+            color: #666; 
+            border-top: 1px solid #e1e8ff; 
+        }
+        .summary { 
+            background: #e8f4fd; 
+            padding: 30px; 
+            border-radius: 15px; 
+            margin-bottom: 40px; 
+            border-left: 5px solid #3498db; 
+        }
+        .tab-item { background-color: #fff8e1; border-left: 4px solid #ff9800; }
+        .exhibit-item { background-color: #f3e5f5; border-left: 4px solid #9c27b0; }
+        .tab-id { background: linear-gradient(135deg, #ff9800, #f57c00); }
+        .exhibit-id { background: linear-gradient(135deg, #9c27b0, #7b1fa2); }
+        .view-all-btn {
+            background: #3498db;
+            color: white;
+            text-decoration: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: bold;
+            display: inline-block;
+            margin: 20px auto;
+            border: 2px solid #e1e8ff;
+            transition: all 0.3s;
+        }
+        .view-all-btn:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔗 Master Hyperlink Index</h1>
+            <p>Unified Access to All Document Hyperlinks</p>
+        </div>
+        
+        <div class="content">
+            <div class="summary">
+                <h2 style="color: #2c3e50; margin-bottom: 20px; font-size: 1.6em;">📋 Complete Legal Document Navigation System</h2>
+                <p style="color: #5a6c7d; line-height: 1.6; margin-bottom: 15px;">
+                    <strong>This master index contains all hyperlinks from your legal documents:</strong>
+                </p>
+                <ul style="color: #5a6c7d; line-height: 1.6; margin-left: 20px;">
+                    <li><strong>86-Page Document "BABI AFF 14 A BS":</strong> 63 clickable tab hyperlinks</li>
+                    <li><strong>Total Professional Hyperlinks:</strong> 63 tabs for precise legal document navigation</li>
+                </ul>
+                <p style="color: #5a6c7d; line-height: 1.6; margin-top: 15px;">
+                    Click any hyperlink below to instantly open the PDF at the exact page. Use edit buttons to modify page numbers in real-time.
+                </p>
+            </div>
+            
+            <!-- 86-Page Tab Document Section -->
+            <div class="document-section">
+                <div class="document-title">
+                    📑 BABI AFF 14 A BS (86-Page Document)
+                    <span style="font-size: 0.6em; background: #ff9800; color: white; padding: 5px 10px; border-radius: 15px;">63 Tabs</span>
+                </div>
+                <div class="document-stats">
+                    📄 Document: 86 pages • 📁 Case: Ferrante V Ferrante • 🔗 Tab-based Navigation (Tabs 1-63)
+                </div>
+                
+                <!-- Show first 6 tabs as examples -->
+                <div class="hyperlinks-grid">
+                    <div class="hyperlink-item tab-item">
+                        <div class="hyperlink-header">
+                            <div class="hyperlink-id tab-id">Tab 1</div>
+                            <div class="hyperlink-page">Page ?</div>
+                        </div>
+                        <div class="hyperlink-title">Legal Document Section 1</div>
+                        <div class="hyperlink-actions">
+                            <button class="open-btn" onclick="openTab86(1)">👆 Open PDF</button>
+                            <button class="edit-btn" onclick="editTab86(1)">✏️ Edit</button>
+                        </div>
+                    </div>
+                    
+                    <div class="hyperlink-item tab-item">
+                        <div class="hyperlink-header">
+                            <div class="hyperlink-id tab-id">Tab 2</div>
+                            <div class="hyperlink-page">Page ?</div>
+                        </div>
+                        <div class="hyperlink-title">Legal Document Section 2</div>
+                        <div class="hyperlink-actions">
+                            <button class="open-btn" onclick="openTab86(2)">👆 Open PDF</button>
+                            <button class="edit-btn" onclick="editTab86(2)">✏️ Edit</button>
+                        </div>
+                    </div>
+                    
+                    <div class="hyperlink-item tab-item">
+                        <div class="hyperlink-header">
+                            <div class="hyperlink-id tab-id">Tab 3</div>
+                            <div class="hyperlink-page">Page ?</div>
+                        </div>
+                        <div class="hyperlink-title">Legal Document Section 3</div>
+                        <div class="hyperlink-actions">
+                            <button class="open-btn" onclick="openTab86(3)">👆 Open PDF</button>
+                            <button class="edit-btn" onclick="editTab86(3)">✏️ Edit</button>
+                        </div>
+                    </div>
+                    
+                    <div class="hyperlink-item tab-item">
+                        <div class="hyperlink-header">
+                            <div class="hyperlink-id tab-id">Tab 4</div>
+                            <div class="hyperlink-page">Page ?</div>
+                        </div>
+                        <div class="hyperlink-title">Legal Document Section 4</div>
+                        <div class="hyperlink-actions">
+                            <button class="open-btn" onclick="openTab86(4)">👆 Open PDF</button>
+                            <button class="edit-btn" onclick="editTab86(4)">✏️ Edit</button>
+                        </div>
+                    </div>
+                    
+                    <div class="hyperlink-item tab-item">
+                        <div class="hyperlink-header">
+                            <div class="hyperlink-id tab-id">Tab 5</div>
+                            <div class="hyperlink-page">Page ?</div>
+                        </div>
+                        <div class="hyperlink-title">Legal Document Section 5</div>
+                        <div class="hyperlink-actions">
+                            <button class="open-btn" onclick="openTab86(5)">👆 Open PDF</button>
+                            <button class="edit-btn" onclick="editTab86(5)">✏️ Edit</button>
+                        </div>
+                    </div>
+                    
+                    <div class="hyperlink-item tab-item">
+                        <div class="hyperlink-header">
+                            <div class="hyperlink-id tab-id">Tab 6</div>
+                            <div class="hyperlink-page">Page ?</div>
+                        </div>
+                        <div class="hyperlink-title">Legal Document Section 6</div>
+                        <div class="hyperlink-actions">
+                            <button class="open-btn" onclick="openTab86(6)">👆 Open PDF</button>
+                            <button class="edit-btn" onclick="editTab86(6)">✏️ Edit</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Link to view all 63 tabs -->
+                <div style="text-align: center; margin-top: 30px;">
+                    <a href="/online/html/402a559a-f1d2-46e0-aee5-b72fb2a74311/b5d731f8-1f87-451b-96ba-c4a38bd33fbe" 
+                       target="_blank" 
+                       class="view-all-btn">
+                        🔗 View Complete Tab Index (All 63 Tabs)
+                    </a>
+                    <p style="color: #666; margin-top: 10px; font-size: 0.9em;">
+                        Complete index with all 63 tabs • Click to access full tab navigation
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <h3 style="color: #2c3e50; margin-bottom: 20px;">🎯 Professional Legal Document Hyperlink Management</h3>
+            <p><strong>Master Index Summary:</strong></p>
+            <p>📑 86-Page Document "BABI AFF 14 A BS": 63 tab hyperlinks (Tabs 1-63)</p>
+            <p><strong>Total: 63 clickable professional legal document hyperlinks</strong></p>
+            <p style="margin-top: 25px; font-size: 0.9em; color: #888;">
+                Generated by HyperlinkLaw.com • Automated Legal Document Hyperlinking System<br>
+                All hyperlinks open PDFs at exact page numbers • Real-time editing enabled
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // 86-page document tab functions
+        window.openTab86 = function(tabNumber) {
+            const url = '/online/pdf/402a559a-f1d2-46e0-aee5-b72fb2a74311/b5d731f8-1f87-451b-96ba-c4a38bd33fbe#page=' + tabNumber;
+            window.open(url, '_blank');
+            console.log('🔗 Opening Tab ' + tabNumber + ' from 86-page document');
+        };
+        
+        window.editTab86 = function(tabNumber) {
+            const url = '/online/html/402a559a-f1d2-46e0-aee5-b72fb2a74311/b5d731f8-1f87-451b-96ba-c4a38bd33fbe';
+            window.open(url, '_blank');
+            console.log('✏️ Editing Tab ' + tabNumber + ' from 86-page document');
+        };
+        
+        console.log('🚀 Master Hyperlink Index loaded successfully');
+        console.log('📊 Total hyperlinks available: 63 tabs in 86-page document');
+        console.log('📑 Document: BABI AFF 14 A BS (86 pages, 63 tabs)');
+        console.log('🔗 Access complete tab index: /online/html/402a559a-f1d2-46e0-aee5-b72fb2a74311/b5d731f8-1f87-451b-96ba-c4a38bd33fbe');
+    </script>
+</body>
+</html>

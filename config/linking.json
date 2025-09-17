@@ -1,0 +1,26 @@
+{
+  "Amended Doc Brief - Ferrante - 3 July 2025.pdf": {
+    "index_pages": "2-9",
+    "expected_tabs": 63,
+    "document_type": "brief",
+    "output_dir": "out/review_63"
+  },
+  "Amended Supp Doc Brief - Ferrante - 3 July 2025 (2).pdf": {
+    "index_pages": "2",
+    "expected_tabs": 13,
+    "document_type": "brief",
+    "output_dir": "out/review_13"
+  },
+  "Amended Supp Doc Brief - Ferrante - 3 July 2025 (1).pdf": {
+    "index_pages": "2",
+    "expected_tabs": 13,
+    "document_type": "brief",
+    "output_dir": "out/review_13"
+  },
+  "Trial Record - Ferrante - August 13 2025.pdf": {
+    "index_pages": "2",
+    "expected_tabs": 5,
+    "document_type": "trial_record",
+    "output_dir": "out/review_tr5"
+  }
+}

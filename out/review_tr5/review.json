@@ -1,0 +1,41 @@
+{
+  "ok": true,
+  "pdfUrl": "/out/review_tr5/Master.TabsRange.linked.pdf",
+  "total": 5,
+  "links": [
+    {
+      "tab_number": 1,
+      "brief_page": 2,
+      "tr_dest_page": 10,
+      "title": "Opening Statements"
+    },
+    {
+      "tab_number": 2,
+      "brief_page": 2,
+      "tr_dest_page": 25,
+      "title": "Witness Testimony - Day 1"
+    },
+    {
+      "tab_number": 3,
+      "brief_page": 2,
+      "tr_dest_page": 45,
+      "title": "Evidence Presentation"
+    },
+    {
+      "tab_number": 4,
+      "brief_page": 2,
+      "tr_dest_page": 60,
+      "title": "Cross Examination"
+    },
+    {
+      "tab_number": 5,
+      "brief_page": 2,
+      "tr_dest_page": 80,
+      "title": "Closing Arguments"
+    }
+  ],
+  "document_type": "trial_record_internal",
+  "index_pages": [
+    2
+  ]
+}

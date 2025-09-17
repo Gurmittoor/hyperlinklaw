@@ -1,0 +1,1682 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clickable Index - Amended Doc Brief - Ferrante - 3 July 2025</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0 0 10px 0;
+            font-size: 2.5em;
+            font-weight: 300;
+        }
+        .header p {
+            margin: 0;
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        .content {
+            padding: 40px;
+        }
+        .intro {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px;
+            background: #f8f9ff;
+            border-radius: 10px;
+            border-left: 5px solid #2a5298;
+        }
+        .intro h2 {
+            color: #1e3c72;
+            margin-bottom: 15px;
+            font-size: 1.8em;
+        }
+        .intro p {
+            color: #666;
+            font-size: 1.1em;
+            margin: 10px 0;
+        }
+        .tabs-grid {
+            display: grid;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        .tab-item {
+            display: block;
+            text-decoration: none;
+            background: white;
+            border: 2px solid #e1e8ff;
+            border-radius: 10px;
+            padding: 20px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .tab-item:hover {
+            border-color: #2a5298;
+            box-shadow: 0 8px 25px rgba(42,82,152,0.15);
+            transform: translateY(-2px);
+        }
+        .tab-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .tab-number {
+            background: linear-gradient(135deg, #2a5298, #1e3c72);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 25px;
+            font-weight: bold;
+            font-size: 0.9em;
+            margin-right: 15px;
+            min-width: 60px;
+            text-align: center;
+        }
+        .tab-date {
+            color: #666;
+            font-size: 0.95em;
+            font-weight: 500;
+        }
+        .tab-nature {
+            color: #333;
+            font-size: 1.1em;
+            font-weight: 600;
+            line-height: 1.4;
+        }
+        .click-instruction {
+            display: inline-block;
+            background: #e8f4fd;
+            color: #1976d2;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            margin-top: 8px;
+            font-weight: 500;
+        }
+        .edit-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+            justify-content: space-between;
+        }
+        .edit-button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 15px;
+            font-size: 0.85em;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            box-shadow: 0 2px 6px rgba(76, 175, 80, 0.3);
+        }
+        .edit-button:hover {
+            background: #45a049;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(76, 175, 80, 0.4);
+        }
+        .edit-form {
+            display: none;
+            align-items: center;
+            gap: 12px;
+            margin-top: 15px;
+            padding: 15px;
+            background: #f0f8ff;
+            border-radius: 10px;
+            border: 2px solid #4CAF50;
+            box-shadow: 0 4px 12px rgba(76, 175, 80, 0.2);
+            animation: slideDown 0.3s ease-out;
+        }
+        .edit-form.active {
+            display: flex;
+        }
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .page-input {
+            width: 80px;
+            padding: 8px 12px;
+            border: 2px solid #4CAF50;
+            border-radius: 6px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 1em;
+            background: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .page-input:focus {
+            outline: none;
+            border-color: #45a049;
+            box-shadow: 0 0 8px rgba(76, 175, 80, 0.3);
+        }
+        .confirm-btn {
+            background: #4caf50;
+            color: white;
+            border: none;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 0.8em;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        .confirm-btn:hover {
+            background: #45a049;
+        }
+        .cancel-btn {
+            background: #f44336;
+            color: white;
+            border: none;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 0.8em;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        .cancel-btn:hover {
+            background: #da190b;
+        }
+        .updating {
+            background: #2196F3;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 0.8em;
+        }
+        .footer {
+            text-align: center;
+            padding: 30px;
+            background: #f8f9ff;
+            color: #666;
+            border-top: 1px solid #e1e8ff;
+        }
+        .footer p {
+            margin: 5px 0;
+            font-size: 0.9em;
+        }
+        @media (max-width: 768px) {
+            body { padding: 20px; }
+            .header { padding: 30px 20px; }
+            .content { padding: 30px 20px; }
+            .header h1 { font-size: 2em; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📋 Clickable Document Index</h1>
+            <p>Amended Doc Brief - Ferrante - 3 July 2025</p>
+        </div>
+        
+        <div class="content">
+            <div class="intro">
+                <h2>🎯 How to Use This Index</h2>
+                <p><strong>Click any tab below</strong> to instantly open the PDF at that exact page in a new browser tab.</p>
+                <p>Each link opens <code>document_f390853c-f119-48ba-be3d-326971be5a4b_highlighted.pdf</code> at the specific page containing that document.</p>
+                <p><em>Works in any modern browser - Chrome, Firefox, Safari, Edge</em></p>
+                <div style="margin-top: 15px; text-align: center;">
+                    <button onclick="testEditButton()" style="background: #ff9800; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold;">
+                        🧪 Test JavaScript (Click Me First!)
+                    </button>
+                    <p style="font-size: 0.9em; color: #666; margin-top: 8px;">
+                        Click this button to verify JavaScript is working before using edit buttons
+                    </p>
+                </div>
+            </div>
+            
+            <div class="tabs-grid">
+                
+                    <div class="tab-item" id="tab-1">
+                        <div class="tab-header">
+                            <div class="tab-number">Tab 1</div>
+                            <div class="tab-date">October 4, 2019</div>
+                        </div>
+                        <div class="tab-nature">Executed Separation Agreement (Applicant disputes content of document and requires proof in its entirety)</div>
+                        <div class="edit-controls">
+                            <a href="document_f390853c-f119-48ba-be3d-326971be5a4b_highlighted.pdf#page=24" target="_blank" class="click-instruction" id="link-1">
+                                👆 Click to open PDF at page 24
+                            </a>
+                            <button class="edit-button" onclick="editPage(1, 24)">✏️ Edit Page</button>
+                        </div>
+                        <div class="edit-form" id="edit-form-1">
+                            <label style="font-weight: 600; color: #2E7D32;">📝 New Page Number:</label>
+                            <input type="number" class="page-input" id="page-input-1" min="1" max="1223" value="24" placeholder="Page #">
+                            <button class="confirm-btn" onclick="confirmEdit(1)">✅ Update Link</button>
+                            <button class="cancel-btn" onclick="cancelEdit(1)">❌ Cancel</button>
+                        </div>
+                    </div>
+                
+                    <div class="tab-item" id="tab-2">
+                        <div class="tab-header">
+                            <div class="tab-number">Tab 2</div>
+                            <div class="tab-date">September 14, 2019</div>
+                        </div>
+                        <div class="tab-nature">Comparative Market Analysis by Katherine Loucaidou - Property Gallery Realty Inc. (contents admitted as truth by Applicant and Respondent)</div>
+                        <div class="edit-controls">
+                            <a href="document_f390853c-f119-48ba-be3d-326971be5a4b_highlighted.pdf#page=45" target="_blank" class="click-instruction" id="link-2">
+                                👆 Click to open PDF at page 45
+                            </a>
+                            <button class="edit-button" onclick="editPage(2, 45)">✏️ Edit Page</button>
+                        </div>
+                        <div class="edit-form" id="edit-form-2">
+                            <label style="font-weight: 600; color: #2E7D32;">📝 New Page Number:</label>
+                            <input type="number" class="page-input" id="page-input-2" min="1" max="1223" value="45" placeholder="Page #">
+                            <button class="confirm-btn" onclick="confirmEdit(2)">✅ Update Link</button>
+                            <button class="cancel-btn" onclick="cancelEdit(2)">❌ Cancel</button>
+                        </div>
+                    </div>
+                
+                    <div class="tab-item" id="tab-3">
+                        <div class="tab-header">
+                            <div class="tab-number">Tab 3</div>
+                            <div class="tab-date">September, 2019</div>
+                        </div>
+                        <div class="tab-nature">Letter from Nancy Richards-Royal LePage Signature Realty re: incident with Rino Ferrante (content admitted as truth by Applicant)</div>
+                        <div class="edit-controls">
+                            <a href="document_f390853c-f119-48ba-be3d-326971be5a4b_highlighted.pdf#page=55" target="_blank" class="click-instruction" id="link-3">
+                                👆 Click to open PDF at page 55
+                            </a>
+                            <button class="edit-button" onclick="editPage(3, 55)">✏️ Edit Page</button>
+                        </div>
+                        <div class="edit-form" id="edit-form-3">
+                            <label style="font-weight: 600; color: #2E7D32;">📝 New Page Number:</label>
+                            <input type="number" class="page-input" id="page-input-3" min="1" max="1223" value="55" placeholder="Page #">
+                            <button class="confirm-btn" onclick="confirmEdit(3)">✅ Update Link</button>
+                            <button class="cancel-btn" onclick="cancelEdit(3)">❌ Cancel</button>
+                        </div>
+                    </div>
+                
+                    <div class="tab-item" id="tab-4">
+                        <div class="tab-header">
+                            <div class="tab-number">Tab 4</div>
+                            <div class="tab-date">September 17, 2019</div>
+                        </div>
+                        <div class="tab-nature">Email from Paul Rishi - Royal Lepage Vendex Realty re: market value of home (contents admitted as truth by Applicant)</div>
+                        <div class="edit-controls">
+                            <a href="document_f390853c-f119-48ba-be3d-326971be5a4b_highlighted.pdf#page=65" target="_blank" class="click-instruction" id="link-4">
+                                👆 Click to open PDF at page 65
+                            </a>
+                            <button class="edit-button" onclick="editPage(4, 65)">✏️ Edit Page</button>
+                        </div>
+                        <div class="edit-form" id="edit-form-4">
+                            <label style="font-weight: 600; color: #2E7D32;">📝 New Page Number:</label>
+                            <input type="number" class="page-input" id="page-input-4" min="1" max="1223" value="65" placeholder="Page #">
+                            <button class="confirm-btn" onclick="confirmEdit(4)">✅ Update Link</button>
+                            <button class="cancel-btn" onclick="cancelEdit(4)">❌ Cancel</button>
+                        </div>
+                    </div>
+                
+                    <div class="tab-item" id="tab-5">
+                        <div class="tab-header">
+                            <div class="tab-number">Tab 5</div>
+                            <div class="tab-date">August 19, 2023</div>
+                        </div>
+                        <div class="tab-nature">Abstract of Title (contents admitted as truth by Applicant and Respondent)</div>
+                        <div class="edit-controls">
+                            <a href="document_f390853c-f119-48ba-be3d-326971be5a4b_highlighted.pdf#page=75" target="_blank" class="click-instruction" id="link-5">
+                                👆 Click to open PDF at page 75
+                            </a>
+                            <button class="edit-button" onclick="editPage(5, 75)">✏️ Edit Page</button>
+                        </div>
+                        <div class="edit-form" id="edit-form-5">
+                            <label style="font-weight: 600; color: #2E7D32;">📝 New Page Number:</label>
+                            <input type="number" class="page-input" id="page-input-5" min="1" max="1223" value="75" placeholder="Page #">
+                            <button class="confirm-btn" onclick="confirmEdit(5)">✅ Update Link</button>
+                            <button class="cancel-btn" onclick="cancelEdit(5)">❌ Cancel</button>
+                        </div>
+                    </div>
+                
+                    <div class="tab-item" id="tab-6">
+                        <div class="tab-header">
+                            <div class="tab-number">Tab 6</div>
+                            <div class="tab-date">February 15, 2019</div>
+                        </div>
+                        <div class="tab-nature">Effort Trust - Executed Mortgage Offer re- First Mortgage Loan (contents admitted as truth by Applicant and Respondent)</div>
+                        <div class="edit-controls">
+                            <a href="document_f390853c-f119-48ba-be3d-326971be5a4b_highlighted.pdf#page=95" target="_blank" class="click-instruction" id="link-6">
+                                👆 Click to open PDF at page 95
+                            </a>
+                            <button class="edit-button" onclick="editPage(6, 95)">✏️ Edit Page</button>
+                        </div>
+                        <div class="edit-form" id="edit-form-6">
+                            <label style="font-weight: 600; color: #2E7D32;">📝 New Page Number:</label>
+                            <input type="number" class="page-input" id="page-input-6" min="1" max="1223" value="95" placeholder="Page #">
+                            <button class="confirm-btn" onclick="confirmEdit(6)">✅ Update Link</button>
+                            <button class="cancel-btn" onclick="cancelEdit(6)">❌ Cancel</button>
+                        </div>
+                    </div>
+                
+                    <div class="tab-item" id="tab-7">
+                        <div class="tab-header">
+                            <div class="tab-number">Tab 7</div>
+                            <div class="tab-date">March 7, 2019</div>
+                        </div>
+                        <div class="tab-nature">Letter from Effort Trust- confirming details of mortgage (contents admitted as truth by Applicant and Respondent)</div>
+                        <div class="edit-controls">
+                            <a href="document_f390853c-f119-48ba-be3d-326971be5a4b_highlighted.pdf#page=115" target="_blank" class="click-instruction" id="link-7">
+                                👆 Click to open PDF at page 115
+                            </a>
+                            <button class="edit-button" onclick="editPage(7, 115)">✏️ Edit Page</button>
+                        </div>
+                        <div class="edit-form" id="edit-form-7">
+                            <label style="font-weight: 600; color: #2E7D32;">📝 New Page Number:</label>
+                            <input type="number" class="page-input" id="page-input-7" min="1" max="1223" value="115" placeholder="Page #">
+                            <button class="confirm-btn" onclick="confirmEdit(7)">✅ Update Link</button>
+                            <button class="cancel-btn" onclick="cancelEdit(7)">❌ Cancel</button>
+                        </div>
+                    </div>
+                
+                    <div class="tab-item" id="tab-8">
+                        <div class="tab-header">
+                            <div class="tab-number">Tab 8</div>
+                            <div class="tab-date">May 24, 2019</div>
+                        </div>
+                        <div class="tab-nature">Indigo Blue - Executed Mortgage Commitment - re: 2nd mortgage (contents admitted as truth by Applicant and Respondent)</div>
+                        <div class="edit-controls">
+                            <a href="document_f390853c-f119-48ba-be3d-326971be5a4b_highlighted.pdf#page=125" target="_blank" class="click-instruction" id="link-8">
+                                👆 Click to open PDF at page 125
+                            </a>
+                            <button class="edit-button" onclick="editPage(8, 125)">✏️ Edit Page</button>
+                        </div>
+                        <div class="edit-form" id="edit-form-8">
+                            <label style="font-weight: 600; color: #2E7D32;">📝 New Page Number:</label>
+                            <input type="number" class="page-input" id="page-input-8" min="1" max="1223" value="125" placeholder="Page #">
+                            <button class="confirm-btn" onclick="confirmEdit(8)">✅ Update Link</button>
+                            <button class="cancel-btn" onclick="cancelEdit(8)">❌ Cancel</button>
+                        </div>
+                    </div>
+                
+                    <div class="tab-item" id="tab-9">
+                        <div class="tab-header">
+                            <div class="tab-number">Tab 9</div>
+                            <div class="tab-date">February 4, 2021</div>
+                        </div>
+                        <div class="tab-nature">Effort Trust - Executed Mortgage Renewal (contents admitted as truth by Applicant and Respondent)</div>
+                        <div class="edit-controls">
+                            <a href="document_f390853c-f119-48ba-be3d-326971be5a4b_highlighted.pdf#page=135" target="_blank" class="click-instruction" id="link-9">
+                                👆 Click to open PDF at page 135
+                            </a>
+                            <button class="edit-button" onclick="editPage(9, 135)">✏️ Edit Page</button>
+                        </div>
+                        <div class="edit-form" id="edit-form-9">
+                            <label style="font-weight: 600; color: #2E7D32;">📝 New Page Number:</label>
+                            <input type="number" class="page-input" id="page-input-9" min="1" max="1223" value="135" placeholder="Page #">
+                            <button class="confirm-btn" onclick="confirmEdit(9)">✅ Update Link</button>
+                            <button class="cancel-btn" onclick="cancelEdit(9)">❌ Cancel</button>
+                        </div>
+                    </div>
+                
+                    <div class="tab-item" id="tab-10">
+                        <div class="tab-header">
+                            <div class="tab-number">Tab 10</div>
+                            <div class="tab-date">March 11, 2021</div>
+                        </div>
+                        <div class="tab-nature">Email from Pat Dowling to Mary Ann re- Mortgage Approval (contents admitted as truth by the Applicant)</div>
+                        <div class="edit-controls">
+                            <a href="document_f390853c-f119-48ba-be3d-326971be5a4b_highlighted.pdf#page=145" target="_blank" class="click-instruction" id="link-10">
+                                👆 Click to open PDF at page 145
+                            </a>
+                            <button class="edit-button" onclick="editPage(10, 145)">✏️ Edit Page</button>
+                        </div>
+                        <div class="edit-form" id="edit-form-10">
+                            <label style="font-weight: 600; color: #2E7D32;">📝 New Page Number:</label>
+                            <input type="number" class="page-input" id="page-input-10" min="1" max="1223" value="145" placeholder="Page #">
+                            <button class="confirm-btn" onclick="confirmEdit(10)">✅ Update Link</button>
+                            <button class="cancel-btn" onclick="cancelEdit(10)">❌ Cancel</button>
+                        </div>
+                    </div>
+                
+                    <div class="tab-item" id="tab-11">
+                        <div class="tab-header">
+                            <div class="tab-number">Tab 11</div>
+                            <div class="tab-date">February 22, 2024</div>
+                        </div>
+                        <div class="tab-nature">Request to Admit of Applicant (facts and documents have been admitted as truth by Respondent as Respondent did not respond to Request to Admit)</div>
+                        <div class="edit-controls">
+                            <a href="document_f390853c-f119-48ba-be3d-326971be5a4b_highlighted.pdf#page=155" target="_blank" class="click-instruction" id="link-11">
+                                👆 Click to open PDF at page 155
+                            </a>
+                            <button class="edit-button" onclick="editPage(11, 155)">✏️ Edit Page</button>
+                        </div>
+                        <div class="edit-form" id="edit-form-11">
+                            <label style="font-weight: 600; color: #2E7D32;">📝 New Page Number:</label>
+                            <input type="number" class="page-input" id="page-input-11" min="1" max="1223" value="155" placeholder="Page #">
+                            <button class="confirm-btn" onclick="confirmEdit(11)">✅ Update Link</button>
+                            <button class="cancel-btn" onclick="cancelEdit(11)">❌ Cancel</button>
+                        </div>
+                    </div>
+                
+                    <div class="tab-item" id="tab-12">
+                        <div class="tab-header">
+                            <div class="tab-number">Tab 12</div>
+                            <div class="tab-date">March 24, 2021</div>
+                        </div>
+                        <div class="tab-nature">Text message between Applicant and Respondent, wherein the Respondent asks the Applicant 'what time can I come by?' (content admitted as truth by Applicant and Respondent)</div>
+                        <div class="edit-controls">
+                            <a href="document_f390853c-f119-48ba-be3d-326971be5a4b_highlighted.pdf#page=175" target="_blank" class="click-instruction" id="link-12">
+                                👆 Click to open PDF at page 175
+                            </a>
+                            <button class="edit-button" onclick="editPage(12, 175)">✏️ Edit Page</button>
+                        </div>
+                        <div class="edit-form" id="edit-form-12">
+                            <label style="font-weight: 600; color: #2E7D32;">📝 New Page Number:</label>
+                            <input type="number" class="page-input" id="page-input-12" min="1" max="1223" value="175" placeholder="Page #">
+                            <button class="confirm-btn" onclick="confirmEdit(12)">✅ Update Link</button>
+                            <button class="cancel-btn" onclick="cancelEdit(12)">❌ Cancel</button>
+                        </div>
+                    </div>
+                
+                    <div class="tab-item" id="tab-13">
+                        <div class="tab-header">
+                            <div class="tab-number">Tab 13</div>
+                            <div class="tab-date">September 11, 2019</div>
+                        </div>
+                        <div class="tab-nature">Picture of Respondent blocking driveway of the matrimonial home, not allowing the Applicant to leave (document has been admitted as truth by Applicant and Respondent)</div>
+                        <div class="edit-controls">
+                            <a href="document_f390853c-f119-48ba-be3d-326971be5a4b_highlighted.pdf#page=185" target="_blank" class="click-instruction" id="link-13">
+                                👆 Click to open PDF at page 185
+                            </a>
+                            <button class="edit-button" onclick="editPage(13, 185)">✏️ Edit Page</button>
+                        </div>
+                        <div class="edit-form" id="edit-form-13">
+                            <label style="font-weight: 600; color: #2E7D32;">📝 New Page Number:</label>
+                            <input type="number" class="page-input" id="page-input-13" min="1" max="1223" value="185" placeholder="Page #">
+                            <button class="confirm-btn" onclick="confirmEdit(13)">✅ Update Link</button>
+                            <button class="cancel-btn" onclick="cancelEdit(13)">❌ Cancel</button>
+                        </div>
+                    </div>
+                
+                    <div class="tab-item" id="tab-14">
+                        <div class="tab-header">
+                            <div class="tab-number">Tab 14</div>
+                            <div class="tab-date">October 5, 2019</div>
+                        </div>
+                        <div class="tab-nature">Picture of moving truck moving the Applicant out of the matrimonial home (document has been admitted as truth by Applicant and Respondent)</div>
+                        <div class="edit-controls">
+                            <a href="document_f390853c-f119-48ba-be3d-326971be5a4b_highlighted.pdf#page=195" target="_blank" class="click-instruction" id="link-14">
+                                👆 Click to open PDF at page 195
+                            </a>
+                            <button class="edit-button" onclick="editPage(14, 195)">✏️ Edit Page</button>
+                        </div>
+                        <div class="edit-form" id="edit-form-14">
+                            <label style="font-weight: 600; color: #2E7D32;">📝 New Page Number:</label>
+                            <input type="number" class="page-input" id="page-input-14" min="1" max="1223" value="195" placeholder="Page #">
+                            <button class="confirm-btn" onclick="confirmEdit(14)">✅ Update Link</button>
+                            <button class="cancel-btn" onclick="cancelEdit(14)">❌ Cancel</button>
+                        </div>
+                    </div>
+                
+                    <div class="tab-item" id="tab-15">
+                        <div class="tab-header">
+                            <div class="tab-number">Tab 15</div>
+                            <div class="tab-date">February 25, 2022</div>
+                        </div>
+                        <div class="tab-nature">Endorsement of Justice Barnes re: Respondent permitted to renew mortgage</div>
+                        <div class="edit-controls">
+                            <a href="document_f390853c-f119-48ba-be3d-326971be5a4b_highlighted.pdf#page=205" target="_blank" class="click-instruction" id="link-15">
+                                👆 Click to open PDF at page 205
+                            </a>
+                            <button class="edit-button" onclick="editPage(15, 205)">✏️ Edit Page</button>
+                        </div>
+                        <div class="edit-form" id="edit-form-15">
+                            <label style="font-weight: 600; color: #2E7D32;">📝 New Page Number:</label>
+                            <input type="number" class="page-input" id="page-input-15" min="1" max="1223" value="205" placeholder="Page #">
+                            <button class="confirm-btn" onclick="confirmEdit(15)">✅ Update Link</button>
+                            <button class="cancel-btn" onclick="cancelEdit(15)">❌ Cancel</button>
+                        </div>
+                    </div>
+                
+                    <div class="tab-item" id="tab-16">
+                        <div class="tab-header">
+                            <div class="tab-number">Tab 16</div>
+                            <div class="tab-date">February 25, 2022</div>
+                        </div>
+                        <div class="tab-nature">Endorsement of Justice Barnes re: Respondent's motion dismissed and costs awarded to Applicant</div>
+                        <div class="edit-controls">
+                            <a href="document_f390853c-f119-48ba-be3d-326971be5a4b_highlighted.pdf#page=215" target="_blank" class="click-instruction" id="link-16">
+                                👆 Click to open PDF at page 215
+                            </a>
+                            <button class="edit-button" onclick="editPage(16, 215)">✏️ Edit Page</button>
+                        </div>
+                        <div class="edit-form" id="edit-form-16">
+                            <label style="font-weight: 600; color: #2E7D32;">📝 New Page Number:</label>
+                            <input type="number" class="page-input" id="page-input-16" min="1" max="1223" value="215" placeholder="Page #">
+                            <button class="confirm-btn" onclick="confirmEdit(16)">✅ Update Link</button>
+                            <button class="cancel-btn" onclick="cancelEdit(16)">❌ Cancel</button>
+                        </div>
+                    </div>
+                
+                    <div class="tab-item" id="tab-17">
+                        <div class="tab-header">
+                            <div class="tab-number">Tab 17</div>
+                            <div class="tab-date">April 25, 2022</div>
+                        </div>
+                        <div class="tab-nature">Endorsement of Justice Petersen re: case conference held, parties granted leave for their motions</div>
+                        <div class="edit-controls">
+                            <a href="document_f390853c-f119-48ba-be3d-326971be5a4b_highlighted.pdf#page=225" target="_blank" class="click-instruction" id="link-17">
+                                👆 Click to open PDF at page 225
+                            </a>
+                            <button class="edit-button" onclick="editPage(17, 225)">✏️ Edit Page</button>
+                        </div>
+                        <div class="edit-form" id="edit-form-17">
+                            <label style="font-weight: 600; color: #2E7D32;">📝 New Page Number:</label>
+                            <input type="number" class="page-input" id="page-input-17" min="1" max="1223" value="225" placeholder="Page #">
+                            <button class="confirm-btn" onclick="confirmEdit(17)">✅ Update Link</button>
+                            <button class="cancel-btn" onclick="cancelEdit(17)">❌ Cancel</button>
+                        </div>
+                    </div>
+                
+                    <div class="tab-item" id="tab-18">
+                        <div class="tab-header">
+                            <div class="tab-number">Tab 18</div>
+                            <div class="tab-date">September 23, 2022</div>
+                        </div>
+                        <div class="tab-nature">Endorsement of Justice McSweeney re: scheduling of settlement conference</div>
+                        <div class="edit-controls">
+                            <a href="document_f390853c-f119-48ba-be3d-326971be5a4b_highlighted.pdf#page=235" target="_blank" class="click-instruction" id="link-18">
+                                👆 Click to open PDF at page 235
+                            </a>
+                            <button class="edit-button" onclick="editPage(18, 235)">✏️ Edit Page</button>
+                        </div>
+                        <div class="edit-form" id="edit-form-18">
+                            <label style="font-weight: 600; color: #2E7D32;">📝 New Page Number:</label>
+                            <input type="number" class="page-input" id="page-input-18" min="1" max="1223" value="235" placeholder="Page #">
+                            <button class="confirm-btn" onclick="confirmEdit(18)">✅ Update Link</button>
+                            <button class="cancel-btn" onclick="cancelEdit(18)">❌ Cancel</button>
+                        </div>
+                    </div>
+                
+                    <div class="tab-item" id="tab-19">
+                        <div class="tab-header">
+                            <div class="tab-number">Tab 19</div>
+                            <div class="tab-date">November 24, 2022</div>
+                        </div>
+                        <div class="tab-nature">Endorsement of Justice Agarwal re: adjournment of motions</div>
+                        <div class="edit-controls">
+                            <a href="document_f390853c-f119-48ba-be3d-326971be5a4b_highlighted.pdf#page=245" target="_blank" class="click-instruction" id="link-19">
+                                👆 Click to open PDF at page 245
+                            </a>
+                            <button class="edit-button" onclick="editPage(19, 245)">✏️ Edit Page</button>
+                        </div>
+                        <div class="edit-form" id="edit-form-19">
+                            <label style="font-weight: 600; color: #2E7D32;">📝 New Page Number:</label>
+                            <input type="number" class="page-input" id="page-input-19" min="1" max="1223" value="245" placeholder="Page #">
+                            <button class="confirm-btn" onclick="confirmEdit(19)">✅ Update Link</button>
+                            <button class="cancel-btn" onclick="cancelEdit(19)">❌ Cancel</button>
+                        </div>
+                    </div>
+                
+                    <div class="tab-item" id="tab-20">
+                        <div class="tab-header">
+                            <div class="tab-number">Tab 20</div>
+                            <div class="tab-date">December 6, 2022</div>
+                        </div>
+                        <div class="tab-nature">Endorsement of Justice Daley re: motion for interim child support</div>
+                        <div class="edit-controls">
+                            <a href="document_f390853c-f119-48ba-be3d-326971be5a4b_highlighted.pdf#page=255" target="_blank" class="click-instruction" id="link-20">
+                                👆 Click to open PDF at page 255
+                            </a>
+                            <button class="edit-button" onclick="editPage(20, 255)">✏️ Edit Page</button>
+                        </div>
+                        <div class="edit-form" id="edit-form-20">
+                            <label style="font-weight: 600; color: #2E7D32;">📝 New Page Number:</label>
+                            <input type="number" class="page-input" id="page-input-20" min="1" max="1223" value="255" placeholder="Page #">
+                            <button class="confirm-btn" onclick="confirmEdit(20)">✅ Update Link</button>
+                            <button class="cancel-btn" onclick="cancelEdit(20)">❌ Cancel</button>
+                        </div>
+                    </div>
+                
+                    <div class="tab-item" id="tab-21">
+                        <div class="tab-header">
+                            <div class="tab-number">Tab 21</div>
+                            <div class="tab-date">December 6, 2022</div>
+                        </div>
+                        <div class="tab-nature">Order of the Justice Daley re: interim child support</div>
+                        <div class="edit-controls">
+                            <a href="document_f390853c-f119-48ba-be3d-326971be5a4b_highlighted.pdf#page=265" target="_blank" class="click-instruction" id="link-21">
+                                👆 Click to open PDF at page 265
+                            </a>
+                            <button class="edit-button" onclick="editPage(21, 265)">✏️ Edit Page</button>
+                        </div>
+                        <div class="edit-form" id="edit-form-21">
+                            <label style="font-weight: 600; color: #2E7D32;">📝 New Page Number:</label>
+                            <input type="number" class="page-input" id="page-input-21" min="1" max="1223" value="265" placeholder="Page #">
+                            <button class="confirm-btn" onclick="confirmEdit(21)">✅ Update Link</button>
+                            <button class="cancel-btn" onclick="cancelEdit(21)">❌ Cancel</button>
+                        </div>
+                    </div>
+                
+                    <div class="tab-item" id="tab-22">
+                        <div class="tab-header">
+                            <div class="tab-number">Tab 22</div>
+                            <div class="tab-date">December 30, 2022</div>
+                        </div>
+                        <div class="tab-nature">Endorsement of Justice Tzimas re: motion for mortgage renewal</div>
+                        <div class="edit-controls">
+                            <a href="document_f390853c-f119-48ba-be3d-326971be5a4b_highlighted.pdf#page=275" target="_blank" class="click-instruction" id="link-22">
+                                👆 Click to open PDF at page 275
+                            </a>
+                            <button class="edit-button" onclick="editPage(22, 275)">✏️ Edit Page</button>
+                        </div>
+                        <div class="edit-form" id="edit-form-22">
+                            <label style="font-weight: 600; color: #2E7D32;">📝 New Page Number:</label>
+                            <input type="number" class="page-input" id="page-input-22" min="1" max="1223" value="275" placeholder="Page #">
+                            <button class="confirm-btn" onclick="confirmEdit(22)">✅ Update Link</button>
+                            <button class="cancel-btn" onclick="cancelEdit(22)">❌ Cancel</button>
+                        </div>
+                    </div>
+                
+                    <div class="tab-item" id="tab-23">
+                        <div class="tab-header">
+                            <div class="tab-number">Tab 23</div>
+                            <div class="tab-date">January 3, 2023</div>
+                        </div>
+                        <div class="tab-nature">Endorsement of Justice Stribopoulos re: motion for mortgage renewal</div>
+                        <div class="edit-controls">
+                            <a href="document_f390853c-f119-48ba-be3d-326971be5a4b_highlighted.pdf#page=285" target="_blank" class="click-instruction" id="link-23">
+                                👆 Click to open PDF at page 285
+                            </a>
+                            <button class="edit-button" onclick="editPage(23, 285)">✏️ Edit Page</button>
+                        </div>
+                        <div class="edit-form" id="edit-form-23">
+                            <label style="font-weight: 600; color: #2E7D32;">📝 New Page Number:</label>
+                            <input type="number" class="page-input" id="page-input-23" min="1" max="1223" value="285" placeholder="Page #">
+                            <button class="confirm-btn" onclick="confirmEdit(23)">✅ Update Link</button>
+                            <button class="cancel-btn" onclick="cancelEdit(23)">❌ Cancel</button>
+                        </div>
+                    </div>
+                
+                    <div class="tab-item" id="tab-24">
+                        <div class="tab-header">
+                            <div class="tab-number">Tab 24</div>
+                            <div class="tab-date">April 6, 2023</div>
+                        </div>
+                        <div class="tab-nature">Costs Endorsement of Justice Daley</div>
+                        <div class="edit-controls">
+                            <a href="document_f390853c-f119-48ba-be3d-326971be5a4b_highlighted.pdf#page=295" target="_blank" class="click-instruction" id="link-24">
+                                👆 Click to open PDF at page 295
+                            </a>
+                            <button class="edit-button" onclick="editPage(24, 295)">✏️ Edit Page</button>
+                        </div>
+                        <div class="edit-form" id="edit-form-24">
+                            <label style="font-weight: 600; color: #2E7D32;">📝 New Page Number:</label>
+                            <input type="number" class="page-input" id="page-input-24" min="1" max="1223" value="295" placeholder="Page #">
+                            <button class="confirm-btn" onclick="confirmEdit(24)">✅ Update Link</button>
+                            <button class="cancel-btn" onclick="cancelEdit(24)">❌ Cancel</button>
+                        </div>
+                    </div>
+                
+                    <div class="tab-item" id="tab-25">
+                        <div class="tab-header">
+                            <div class="tab-number">Tab 25</div>
+                            <div class="tab-date">May 29, 2023</div>
+                        </div>
+                        <div class="tab-nature">Endorsement of Justice McSweeney re-settlement conference</div>
+                        <div class="edit-controls">
+                            <a href="document_f390853c-f119-48ba-be3d-326971be5a4b_highlighted.pdf#page=305" target="_blank" class="click-instruction" id="link-25">
+                                👆 Click to open PDF at page 305
+                            </a>
+                            <button class="edit-button" onclick="editPage(25, 305)">✏️ Edit Page</button>
+                        </div>
+                        <div class="edit-form" id="edit-form-25">
+                            <label style="font-weight: 600; color: #2E7D32;">📝 New Page Number:</label>
+                            <input type="number" class="page-input" id="page-input-25" min="1" max="1223" value="305" placeholder="Page #">
+                            <button class="confirm-btn" onclick="confirmEdit(25)">✅ Update Link</button>
+                            <button class="cancel-btn" onclick="cancelEdit(25)">❌ Cancel</button>
+                        </div>
+                    </div>
+                
+                    <div class="tab-item" id="tab-26">
+                        <div class="tab-header">
+                            <div class="tab-number">Tab 26</div>
+                            <div class="tab-date">May 29, 2023</div>
+                        </div>
+                        <div class="tab-nature">Order of Justice McSweeney re: interim child support and production of disclosure by Respondent</div>
+                        <div class="edit-controls">
+                            <a href="document_f390853c-f119-48ba-be3d-326971be5a4b_highlighted.pdf#page=315" target="_blank" class="click-instruction" id="link-26">
+                                👆 Click to open PDF at page 315
+                            </a>
+                            <button class="edit-button" onclick="editPage(26, 315)">✏️ Edit Page</button>
+                        </div>
+                        <div class="edit-form" id="edit-form-26">
+                            <label style="font-weight: 600; color: #2E7D32;">📝 New Page Number:</label>
+                            <input type="number" class="page-input" id="page-input-26" min="1" max="1223" value="315" placeholder="Page #">
+                            <button class="confirm-btn" onclick="confirmEdit(26)">✅ Update Link</button>
+                            <button class="cancel-btn" onclick="cancelEdit(26)">❌ Cancel</button>
+                        </div>
+                    </div>
+                
+                    <div class="tab-item" id="tab-27">
+                        <div class="tab-header">
+                            <div class="tab-number">Tab 27</div>
+                            <div class="tab-date">October 31, 2023</div>
+                        </div>
+                        <div class="tab-nature">Endorsement of Justice LeMay re: document disclosure</div>
+                        <div class="edit-controls">
+                            <a href="document_f390853c-f119-48ba-be3d-326971be5a4b_highlighted.pdf#page=325" target="_blank" class="click-instruction" id="link-27">
+                                👆 Click to open PDF at page 325
+                            </a>
+                            <button class="edit-button" onclick="editPage(27, 325)">✏️ Edit Page</button>
+                        </div>
+                        <div class="edit-form" id="edit-form-27">
+                            <label style="font-weight: 600; color: #2E7D32;">📝 New Page Number:</label>
+                            <input type="number" class="page-input" id="page-input-27" min="1" max="1223" value="325" placeholder="Page #">
+                            <button class="confirm-btn" onclick="confirmEdit(27)">✅ Update Link</button>
+                            <button class="cancel-btn" onclick="cancelEdit(27)">❌ Cancel</button>
+                        </div>
+                    </div>
+                
+                    <div class="tab-item" id="tab-28">
+                        <div class="tab-header">
+                            <div class="tab-number">Tab 28</div>
+                            <div class="tab-date">November 30, 2023</div>
+                        </div>
+                        <div class="tab-nature">Endorsement of Justice Kumaranayake re: Trial Management Conference</div>
+                        <div class="edit-controls">
+                            <a href="document_f390853c-f119-48ba-be3d-326971be5a4b_highlighted.pdf#page=335" target="_blank" class="click-instruction" id="link-28">
+                                👆 Click to open PDF at page 335
+                            </a>
+                            <button class="edit-button" onclick="editPage(28, 335)">✏️ Edit Page</button>
+                        </div>
+                        <div class="edit-form" id="edit-form-28">
+                            <label style="font-weight: 600; color: #2E7D32;">📝 New Page Number:</label>
+                            <input type="number" class="page-input" id="page-input-28" min="1" max="1223" value="335" placeholder="Page #">
+                            <button class="confirm-btn" onclick="confirmEdit(28)">✅ Update Link</button>
+                            <button class="cancel-btn" onclick="cancelEdit(28)">❌ Cancel</button>
+                        </div>
+                    </div>
+                
+                    <div class="tab-item" id="tab-29">
+                        <div class="tab-header">
+                            <div class="tab-number">Tab 29</div>
+                            <div class="tab-date">September 15, 2022</div>
+                        </div>
+                        <div class="tab-nature">Affidavit of Rino Ferrante re: motion brought by Respondent re: ability to re-mortgage property (document must be proved in its entirety by Respondent)</div>
+                        <div class="edit-controls">
+                            <a href="document_f390853c-f119-48ba-be3d-326971be5a4b_highlighted.pdf#page=345" target="_blank" class="click-instruction" id="link-29">
+                                👆 Click to open PDF at page 345
+                            </a>
+                            <button class="edit-button" onclick="editPage(29, 345)">✏️ Edit Page</button>
+                        </div>
+                        <div class="edit-form" id="edit-form-29">
+                            <label style="font-weight: 600; color: #2E7D32;">📝 New Page Number:</label>
+                            <input type="number" class="page-input" id="page-input-29" min="1" max="1223" value="345" placeholder="Page #">
+                            <button class="confirm-btn" onclick="confirmEdit(29)">✅ Update Link</button>
+                            <button class="cancel-btn" onclick="cancelEdit(29)">❌ Cancel</button>
+                        </div>
+                    </div>
+                
+                    <div class="tab-item" id="tab-30">
+                        <div class="tab-header">
+                            <div class="tab-number">Tab 30</div>
+                            <div class="tab-date">September 15, 2022</div>
+                        </div>
+                        <div class="tab-nature">Affidavit of Serafina Ferrante re: motion brought by Respondent for ability to re-mortgage property (contents admitted as truth by the Applicant)</div>
+                        <div class="edit-controls">
+                            <a href="document_f390853c-f119-48ba-be3d-326971be5a4b_highlighted.pdf#page=365" target="_blank" class="click-instruction" id="link-30">
+                                👆 Click to open PDF at page 365
+                            </a>
+                            <button class="edit-button" onclick="editPage(30, 365)">✏️ Edit Page</button>
+                        </div>
+                        <div class="edit-form" id="edit-form-30">
+                            <label style="font-weight: 600; color: #2E7D32;">📝 New Page Number:</label>
+                            <input type="number" class="page-input" id="page-input-30" min="1" max="1223" value="365" placeholder="Page #">
+                            <button class="confirm-btn" onclick="confirmEdit(30)">✅ Update Link</button>
+                            <button class="cancel-btn" onclick="cancelEdit(30)">❌ Cancel</button>
+                        </div>
+                    </div>
+                
+                    <div class="tab-item" id="tab-31">
+                        <div class="tab-header">
+                            <div class="tab-number">Tab 31</div>
+                            <div class="tab-date">September 15, 2022</div>
+                        </div>
+                        <div class="tab-nature">Supplementary Affidavit of Serafina Ferrante re: motion brought by Respondent (contents admitted as truth by the Applicant)</div>
+                        <div class="edit-controls">
+                            <a href="document_f390853c-f119-48ba-be3d-326971be5a4b_highlighted.pdf#page=385" target="_blank" class="click-instruction" id="link-31">
+                                👆 Click to open PDF at page 385
+                            </a>
+                            <button class="edit-button" onclick="editPage(31, 385)">✏️ Edit Page</button>
+                        </div>
+                        <div class="edit-form" id="edit-form-31">
+                            <label style="font-weight: 600; color: #2E7D32;">📝 New Page Number:</label>
+                            <input type="number" class="page-input" id="page-input-31" min="1" max="1223" value="385" placeholder="Page #">
+                            <button class="confirm-btn" onclick="confirmEdit(31)">✅ Update Link</button>
+                            <button class="cancel-btn" onclick="cancelEdit(31)">❌ Cancel</button>
+                        </div>
+                    </div>
+                
+                    <div class="tab-item" id="tab-32">
+                        <div class="tab-header">
+                            <div class="tab-number">Tab 32</div>
+                            <div class="tab-date">September 19, 2022</div>
+                        </div>
+                        <div class="tab-nature">Affidavit of Serafina Ferrante re: motion brought by Respondent (contents admitted as truth by the Applicant)</div>
+                        <div class="edit-controls">
+                            <a href="document_f390853c-f119-48ba-be3d-326971be5a4b_highlighted.pdf#page=405" target="_blank" class="click-instruction" id="link-32">
+                                👆 Click to open PDF at page 405
+                            </a>
+                            <button class="edit-button" onclick="editPage(32, 405)">✏️ Edit Page</button>
+                        </div>
+                        <div class="edit-form" id="edit-form-32">
+                            <label style="font-weight: 600; color: #2E7D32;">📝 New Page Number:</label>
+                            <input type="number" class="page-input" id="page-input-32" min="1" max="1223" value="405" placeholder="Page #">
+                            <button class="confirm-btn" onclick="confirmEdit(32)">✅ Update Link</button>
+                            <button class="cancel-btn" onclick="cancelEdit(32)">❌ Cancel</button>
+                        </div>
+                    </div>
+                
+                    <div class="tab-item" id="tab-33">
+                        <div class="tab-header">
+                            <div class="tab-number">Tab 33</div>
+                            <div class="tab-date">September 20, 2022</div>
+                        </div>
+                        <div class="tab-nature">Reply Affidavit of Rino Ferrante re: ability to re-mortgage property (document must be proved in its entirety by Respondent)</div>
+                        <div class="edit-controls">
+                            <a href="document_f390853c-f119-48ba-be3d-326971be5a4b_highlighted.pdf#page=425" target="_blank" class="click-instruction" id="link-33">
+                                👆 Click to open PDF at page 425
+                            </a>
+                            <button class="edit-button" onclick="editPage(33, 425)">✏️ Edit Page</button>
+                        </div>
+                        <div class="edit-form" id="edit-form-33">
+                            <label style="font-weight: 600; color: #2E7D32;">📝 New Page Number:</label>
+                            <input type="number" class="page-input" id="page-input-33" min="1" max="1223" value="425" placeholder="Page #">
+                            <button class="confirm-btn" onclick="confirmEdit(33)">✅ Update Link</button>
+                            <button class="cancel-btn" onclick="cancelEdit(33)">❌ Cancel</button>
+                        </div>
+                    </div>
+                
+                    <div class="tab-item" id="tab-34">
+                        <div class="tab-header">
+                            <div class="tab-number">Tab 34</div>
+                            <div class="tab-date">November 14, 2022</div>
+                        </div>
+                        <div class="tab-nature">Affidavit of Serafina Ferrante re: motion brought by Applicant for child support (contents admitted as truth by the Applicant)</div>
+                        <div class="edit-controls">
+                            <a href="document_f390853c-f119-48ba-be3d-326971be5a4b_highlighted.pdf#page=445" target="_blank" class="click-instruction" id="link-34">
+                                👆 Click to open PDF at page 445
+                            </a>
+                            <button class="edit-button" onclick="editPage(34, 445)">✏️ Edit Page</button>
+                        </div>
+                        <div class="edit-form" id="edit-form-34">
+                            <label style="font-weight: 600; color: #2E7D32;">📝 New Page Number:</label>
+                            <input type="number" class="page-input" id="page-input-34" min="1" max="1223" value="445" placeholder="Page #">
+                            <button class="confirm-btn" onclick="confirmEdit(34)">✅ Update Link</button>
+                            <button class="cancel-btn" onclick="cancelEdit(34)">❌ Cancel</button>
+                        </div>
+                    </div>
+                
+                    <div class="tab-item" id="tab-35">
+                        <div class="tab-header">
+                            <div class="tab-number">Tab 35</div>
+                            <div class="tab-date">November 30, 2022</div>
+                        </div>
+                        <div class="tab-nature">Affidavit of Rino Ferrante re: motion for child support brought by Applicant (document must be proved in its entirety by Respondent)</div>
+                        <div class="edit-controls">
+                            <a href="document_f390853c-f119-48ba-be3d-326971be5a4b_highlighted.pdf#page=465" target="_blank" class="click-instruction" id="link-35">
+                                👆 Click to open PDF at page 465
+                            </a>
+                            <button class="edit-button" onclick="editPage(35, 465)">✏️ Edit Page</button>
+                        </div>
+                        <div class="edit-form" id="edit-form-35">
+                            <label style="font-weight: 600; color: #2E7D32;">📝 New Page Number:</label>
+                            <input type="number" class="page-input" id="page-input-35" min="1" max="1223" value="465" placeholder="Page #">
+                            <button class="confirm-btn" onclick="confirmEdit(35)">✅ Update Link</button>
+                            <button class="cancel-btn" onclick="cancelEdit(35)">❌ Cancel</button>
+                        </div>
+                    </div>
+                
+                    <div class="tab-item" id="tab-36">
+                        <div class="tab-header">
+                            <div class="tab-number">Tab 36</div>
+                            <div class="tab-date">December 1, 2022</div>
+                        </div>
+                        <div class="tab-nature">Reply Affidavit of Serafina Ferrante re: motion brought by Applicant for child support and questioning of Respondent (contents admitted as truth by the Applicant)</div>
+                        <div class="edit-controls">
+                            <a href="document_f390853c-f119-48ba-be3d-326971be5a4b_highlighted.pdf#page=485" target="_blank" class="click-instruction" id="link-36">
+                                👆 Click to open PDF at page 485
+                            </a>
+                            <button class="edit-button" onclick="editPage(36, 485)">✏️ Edit Page</button>
+                        </div>
+                        <div class="edit-form" id="edit-form-36">
+                            <label style="font-weight: 600; color: #2E7D32;">📝 New Page Number:</label>
+                            <input type="number" class="page-input" id="page-input-36" min="1" max="1223" value="485" placeholder="Page #">
+                            <button class="confirm-btn" onclick="confirmEdit(36)">✅ Update Link</button>
+                            <button class="cancel-btn" onclick="cancelEdit(36)">❌ Cancel</button>
+                        </div>
+                    </div>
+                
+                    <div class="tab-item" id="tab-37">
+                        <div class="tab-header">
+                            <div class="tab-number">Tab 37</div>
+                            <div class="tab-date">December 29, 2022</div>
+                        </div>
+                        <div class="tab-nature">Affidavit of Rino Ferrante re: motion brought by Respondent (document must be proved in its entirety by Respondent)</div>
+                        <div class="edit-controls">
+                            <a href="document_f390853c-f119-48ba-be3d-326971be5a4b_highlighted.pdf#page=505" target="_blank" class="click-instruction" id="link-37">
+                                👆 Click to open PDF at page 505
+                            </a>
+                            <button class="edit-button" onclick="editPage(37, 505)">✏️ Edit Page</button>
+                        </div>
+                        <div class="edit-form" id="edit-form-37">
+                            <label style="font-weight: 600; color: #2E7D32;">📝 New Page Number:</label>
+                            <input type="number" class="page-input" id="page-input-37" min="1" max="1223" value="505" placeholder="Page #">
+                            <button class="confirm-btn" onclick="confirmEdit(37)">✅ Update Link</button>
+                            <button class="cancel-btn" onclick="cancelEdit(37)">❌ Cancel</button>
+                        </div>
+                    </div>
+                
+                    <div class="tab-item" id="tab-38">
+                        <div class="tab-header">
+                            <div class="tab-number">Tab 38</div>
+                            <div class="tab-date">January 2, 2023</div>
+                        </div>
+                        <div class="tab-nature">Affidavit of Serafina Ferrante re: emergency motion brought by Respondent for renewal of mortgage (contents admitted as truth by the Applicant)</div>
+                        <div class="edit-controls">
+                            <a href="document_f390853c-f119-48ba-be3d-326971be5a4b_highlighted.pdf#page=525" target="_blank" class="click-instruction" id="link-38">
+                                👆 Click to open PDF at page 525
+                            </a>
+                            <button class="edit-button" onclick="editPage(38, 525)">✏️ Edit Page</button>
+                        </div>
+                        <div class="edit-form" id="edit-form-38">
+                            <label style="font-weight: 600; color: #2E7D32;">📝 New Page Number:</label>
+                            <input type="number" class="page-input" id="page-input-38" min="1" max="1223" value="525" placeholder="Page #">
+                            <button class="confirm-btn" onclick="confirmEdit(38)">✅ Update Link</button>
+                            <button class="cancel-btn" onclick="cancelEdit(38)">❌ Cancel</button>
+                        </div>
+                    </div>
+                
+                    <div class="tab-item" id="tab-39">
+                        <div class="tab-header">
+                            <div class="tab-number">Tab 39</div>
+                            <div class="tab-date">January 3, 2023</div>
+                        </div>
+                        <div class="tab-nature">Reply Affidavit of Rino Ferrante (document must be proved in its entirety by Respondent)</div>
+                        <div class="edit-controls">
+                            <a href="document_f390853c-f119-48ba-be3d-326971be5a4b_highlighted.pdf#page=545" target="_blank" class="click-instruction" id="link-39">
+                                👆 Click to open PDF at page 545
+                            </a>
+                            <button class="edit-button" onclick="editPage(39, 545)">✏️ Edit Page</button>
+                        </div>
+                        <div class="edit-form" id="edit-form-39">
+                            <label style="font-weight: 600; color: #2E7D32;">📝 New Page Number:</label>
+                            <input type="number" class="page-input" id="page-input-39" min="1" max="1223" value="545" placeholder="Page #">
+                            <button class="confirm-btn" onclick="confirmEdit(39)">✅ Update Link</button>
+                            <button class="cancel-btn" onclick="cancelEdit(39)">❌ Cancel</button>
+                        </div>
+                    </div>
+                
+                    <div class="tab-item" id="tab-40">
+                        <div class="tab-header">
+                            <div class="tab-number">Tab 40</div>
+                            <div class="tab-date">May 23, 2023</div>
+                        </div>
+                        <div class="tab-nature">Affidavit of Rino Ferrante re: update of financial information (document must be proved in its entirety by Respondent)</div>
+                        <div class="edit-controls">
+                            <a href="document_f390853c-f119-48ba-be3d-326971be5a4b_highlighted.pdf#page=565" target="_blank" class="click-instruction" id="link-40">
+                                👆 Click to open PDF at page 565
+                            </a>
+                            <button class="edit-button" onclick="editPage(40, 565)">✏️ Edit Page</button>
+                        </div>
+                        <div class="edit-form" id="edit-form-40">
+                            <label style="font-weight: 600; color: #2E7D32;">📝 New Page Number:</label>
+                            <input type="number" class="page-input" id="page-input-40" min="1" max="1223" value="565" placeholder="Page #">
+                            <button class="confirm-btn" onclick="confirmEdit(40)">✅ Update Link</button>
+                            <button class="cancel-btn" onclick="cancelEdit(40)">❌ Cancel</button>
+                        </div>
+                    </div>
+                
+                    <div class="tab-item" id="tab-41">
+                        <div class="tab-header">
+                            <div class="tab-number">Tab 41</div>
+                            <div class="tab-date">August 21, 2023</div>
+                        </div>
+                        <div class="tab-nature">Affidavit of Applicant re: motion to strike Respondent's pleadings (contents admitted as truth by the Applicant)</div>
+                        <div class="edit-controls">
+                            <a href="document_f390853c-f119-48ba-be3d-326971be5a4b_highlighted.pdf#page=585" target="_blank" class="click-instruction" id="link-41">
+                                👆 Click to open PDF at page 585
+                            </a>
+                            <button class="edit-button" onclick="editPage(41, 585)">✏️ Edit Page</button>
+                        </div>
+                        <div class="edit-form" id="edit-form-41">
+                            <label style="font-weight: 600; color: #2E7D32;">📝 New Page Number:</label>
+                            <input type="number" class="page-input" id="page-input-41" min="1" max="1223" value="585" placeholder="Page #">
+                            <button class="confirm-btn" onclick="confirmEdit(41)">✅ Update Link</button>
+                            <button class="cancel-btn" onclick="cancelEdit(41)">❌ Cancel</button>
+                        </div>
+                    </div>
+                
+                    <div class="tab-item" id="tab-42">
+                        <div class="tab-header">
+                            <div class="tab-number">Tab 42</div>
+                            <div class="tab-date">October 24, 2023</div>
+                        </div>
+                        <div class="tab-nature">Affidavit of Jolanta Chrzaszcz re: emails served on Applicant's lawyer (document must be proved in its entirety by Respondent)</div>
+                        <div class="edit-controls">
+                            <a href="document_f390853c-f119-48ba-be3d-326971be5a4b_highlighted.pdf#page=605" target="_blank" class="click-instruction" id="link-42">
+                                👆 Click to open PDF at page 605
+                            </a>
+                            <button class="edit-button" onclick="editPage(42, 605)">✏️ Edit Page</button>
+                        </div>
+                        <div class="edit-form" id="edit-form-42">
+                            <label style="font-weight: 600; color: #2E7D32;">📝 New Page Number:</label>
+                            <input type="number" class="page-input" id="page-input-42" min="1" max="1223" value="605" placeholder="Page #">
+                            <button class="confirm-btn" onclick="confirmEdit(42)">✅ Update Link</button>
+                            <button class="cancel-btn" onclick="cancelEdit(42)">❌ Cancel</button>
+                        </div>
+                    </div>
+                
+                    <div class="tab-item" id="tab-43">
+                        <div class="tab-header">
+                            <div class="tab-number">Tab 43</div>
+                            <div class="tab-date">October 24, 2023</div>
+                        </div>
+                        <div class="tab-nature">Reply Affidavit of Respondent re: motion brought by Applicant for undefended trial (document must be proved in its entirety by Respondent)</div>
+                        <div class="edit-controls">
+                            <a href="document_f390853c-f119-48ba-be3d-326971be5a4b_highlighted.pdf#page=625" target="_blank" class="click-instruction" id="link-43">
+                                👆 Click to open PDF at page 625
+                            </a>
+                            <button class="edit-button" onclick="editPage(43, 625)">✏️ Edit Page</button>
+                        </div>
+                        <div class="edit-form" id="edit-form-43">
+                            <label style="font-weight: 600; color: #2E7D32;">📝 New Page Number:</label>
+                            <input type="number" class="page-input" id="page-input-43" min="1" max="1223" value="625" placeholder="Page #">
+                            <button class="confirm-btn" onclick="confirmEdit(43)">✅ Update Link</button>
+                            <button class="cancel-btn" onclick="cancelEdit(43)">❌ Cancel</button>
+                        </div>
+                    </div>
+                
+                    <div class="tab-item" id="tab-44">
+                        <div class="tab-header">
+                            <div class="tab-number">Tab 44</div>
+                            <div class="tab-date">October 24, 2023</div>
+                        </div>
+                        <div class="tab-nature">Affidavit of Rino Ferrante re: productions and answer to Undertakings (document must be proved in its entirety by Respondent)</div>
+                        <div class="edit-controls">
+                            <a href="document_f390853c-f119-48ba-be3d-326971be5a4b_highlighted.pdf#page=645" target="_blank" class="click-instruction" id="link-44">
+                                👆 Click to open PDF at page 645
+                            </a>
+                            <button class="edit-button" onclick="editPage(44, 645)">✏️ Edit Page</button>
+                        </div>
+                        <div class="edit-form" id="edit-form-44">
+                            <label style="font-weight: 600; color: #2E7D32;">📝 New Page Number:</label>
+                            <input type="number" class="page-input" id="page-input-44" min="1" max="1223" value="645" placeholder="Page #">
+                            <button class="confirm-btn" onclick="confirmEdit(44)">✅ Update Link</button>
+                            <button class="cancel-btn" onclick="cancelEdit(44)">❌ Cancel</button>
+                        </div>
+                    </div>
+                
+                    <div class="tab-item" id="tab-45">
+                        <div class="tab-header">
+                            <div class="tab-number">Tab 45</div>
+                            <div class="tab-date">October 26, 2023</div>
+                        </div>
+                        <div class="tab-nature">Affidavit of David Sorbara re: reply to Respondent's Affidavit (contents admitted as truth by the Applicant)</div>
+                        <div class="edit-controls">
+                            <a href="document_f390853c-f119-48ba-be3d-326971be5a4b_highlighted.pdf#page=665" target="_blank" class="click-instruction" id="link-45">
+                                👆 Click to open PDF at page 665
+                            </a>
+                            <button class="edit-button" onclick="editPage(45, 665)">✏️ Edit Page</button>
+                        </div>
+                        <div class="edit-form" id="edit-form-45">
+                            <label style="font-weight: 600; color: #2E7D32;">📝 New Page Number:</label>
+                            <input type="number" class="page-input" id="page-input-45" min="1" max="1223" value="665" placeholder="Page #">
+                            <button class="confirm-btn" onclick="confirmEdit(45)">✅ Update Link</button>
+                            <button class="cancel-btn" onclick="cancelEdit(45)">❌ Cancel</button>
+                        </div>
+                    </div>
+                
+                    <div class="tab-item" id="tab-46">
+                        <div class="tab-header">
+                            <div class="tab-number">Tab 46</div>
+                            <div class="tab-date">October 27, 2023</div>
+                        </div>
+                        <div class="tab-nature">Affidavit of Jolanta Chrzaszcz re: reply to David Sorbara's Affidavit (document must be proved in its entirety by Respondent)</div>
+                        <div class="edit-controls">
+                            <a href="document_f390853c-f119-48ba-be3d-326971be5a4b_highlighted.pdf#page=685" target="_blank" class="click-instruction" id="link-46">
+                                👆 Click to open PDF at page 685
+                            </a>
+                            <button class="edit-button" onclick="editPage(46, 685)">✏️ Edit Page</button>
+                        </div>
+                        <div class="edit-form" id="edit-form-46">
+                            <label style="font-weight: 600; color: #2E7D32;">📝 New Page Number:</label>
+                            <input type="number" class="page-input" id="page-input-46" min="1" max="1223" value="685" placeholder="Page #">
+                            <button class="confirm-btn" onclick="confirmEdit(46)">✅ Update Link</button>
+                            <button class="cancel-btn" onclick="cancelEdit(46)">❌ Cancel</button>
+                        </div>
+                    </div>
+                
+                    <div class="tab-item" id="tab-47">
+                        <div class="tab-header">
+                            <div class="tab-number">Tab 47</div>
+                            <div class="tab-date">January 8, 2022</div>
+                        </div>
+                        <div class="tab-nature">Financial Statement of Applicant (contents admitted as truth by the Applicant)</div>
+                        <div class="edit-controls">
+                            <a href="document_f390853c-f119-48ba-be3d-326971be5a4b_highlighted.pdf#page=705" target="_blank" class="click-instruction" id="link-47">
+                                👆 Click to open PDF at page 705
+                            </a>
+                            <button class="edit-button" onclick="editPage(47, 705)">✏️ Edit Page</button>
+                        </div>
+                        <div class="edit-form" id="edit-form-47">
+                            <label style="font-weight: 600; color: #2E7D32;">📝 New Page Number:</label>
+                            <input type="number" class="page-input" id="page-input-47" min="1" max="1223" value="705" placeholder="Page #">
+                            <button class="confirm-btn" onclick="confirmEdit(47)">✅ Update Link</button>
+                            <button class="cancel-btn" onclick="cancelEdit(47)">❌ Cancel</button>
+                        </div>
+                    </div>
+                
+                    <div class="tab-item" id="tab-48">
+                        <div class="tab-header">
+                            <div class="tab-number">Tab 48</div>
+                            <div class="tab-date">February 12, 2022</div>
+                        </div>
+                        <div class="tab-nature">Financial Statement of Respondent (document must be proved in its entirety by Respondent)</div>
+                        <div class="edit-controls">
+                            <a href="document_f390853c-f119-48ba-be3d-326971be5a4b_highlighted.pdf#page=725" target="_blank" class="click-instruction" id="link-48">
+                                👆 Click to open PDF at page 725
+                            </a>
+                            <button class="edit-button" onclick="editPage(48, 725)">✏️ Edit Page</button>
+                        </div>
+                        <div class="edit-form" id="edit-form-48">
+                            <label style="font-weight: 600; color: #2E7D32;">📝 New Page Number:</label>
+                            <input type="number" class="page-input" id="page-input-48" min="1" max="1223" value="725" placeholder="Page #">
+                            <button class="confirm-btn" onclick="confirmEdit(48)">✅ Update Link</button>
+                            <button class="cancel-btn" onclick="cancelEdit(48)">❌ Cancel</button>
+                        </div>
+                    </div>
+                
+                    <div class="tab-item" id="tab-49">
+                        <div class="tab-header">
+                            <div class="tab-number">Tab 49</div>
+                            <div class="tab-date">May 15, 2023</div>
+                        </div>
+                        <div class="tab-nature">Financial Statement of the Applicant (contents admitted as truth by the Applicant)</div>
+                        <div class="edit-controls">
+                            <a href="document_f390853c-f119-48ba-be3d-326971be5a4b_highlighted.pdf#page=745" target="_blank" class="click-instruction" id="link-49">
+                                👆 Click to open PDF at page 745
+                            </a>
+                            <button class="edit-button" onclick="editPage(49, 745)">✏️ Edit Page</button>
+                        </div>
+                        <div class="edit-form" id="edit-form-49">
+                            <label style="font-weight: 600; color: #2E7D32;">📝 New Page Number:</label>
+                            <input type="number" class="page-input" id="page-input-49" min="1" max="1223" value="745" placeholder="Page #">
+                            <button class="confirm-btn" onclick="confirmEdit(49)">✅ Update Link</button>
+                            <button class="cancel-btn" onclick="cancelEdit(49)">❌ Cancel</button>
+                        </div>
+                    </div>
+                
+                    <div class="tab-item" id="tab-50">
+                        <div class="tab-header">
+                            <div class="tab-number">Tab 50</div>
+                            <div class="tab-date">October 13, 2023</div>
+                        </div>
+                        <div class="tab-nature">Financial Statement of Respondent (document must be proved in its entirety by Respondent)</div>
+                        <div class="edit-controls">
+                            <a href="document_f390853c-f119-48ba-be3d-326971be5a4b_highlighted.pdf#page=765" target="_blank" class="click-instruction" id="link-50">
+                                👆 Click to open PDF at page 765
+                            </a>
+                            <button class="edit-button" onclick="editPage(50, 765)">✏️ Edit Page</button>
+                        </div>
+                        <div class="edit-form" id="edit-form-50">
+                            <label style="font-weight: 600; color: #2E7D32;">📝 New Page Number:</label>
+                            <input type="number" class="page-input" id="page-input-50" min="1" max="1223" value="765" placeholder="Page #">
+                            <button class="confirm-btn" onclick="confirmEdit(50)">✅ Update Link</button>
+                            <button class="cancel-btn" onclick="cancelEdit(50)">❌ Cancel</button>
+                        </div>
+                    </div>
+                
+                    <div class="tab-item" id="tab-51">
+                        <div class="tab-header">
+                            <div class="tab-number">Tab 51</div>
+                            <div class="tab-date">November 6, 2023</div>
+                        </div>
+                        <div class="tab-nature">Financial Statement of Applicant (contents admitted as truth by the Applicant)</div>
+                        <div class="edit-controls">
+                            <a href="document_f390853c-f119-48ba-be3d-326971be5a4b_highlighted.pdf#page=785" target="_blank" class="click-instruction" id="link-51">
+                                👆 Click to open PDF at page 785
+                            </a>
+                            <button class="edit-button" onclick="editPage(51, 785)">✏️ Edit Page</button>
+                        </div>
+                        <div class="edit-form" id="edit-form-51">
+                            <label style="font-weight: 600; color: #2E7D32;">📝 New Page Number:</label>
+                            <input type="number" class="page-input" id="page-input-51" min="1" max="1223" value="785" placeholder="Page #">
+                            <button class="confirm-btn" onclick="confirmEdit(51)">✅ Update Link</button>
+                            <button class="cancel-btn" onclick="cancelEdit(51)">❌ Cancel</button>
+                        </div>
+                    </div>
+                
+                    <div class="tab-item" id="tab-52">
+                        <div class="tab-header">
+                            <div class="tab-number">Tab 52</div>
+                            <div class="tab-date">November 21, 2023</div>
+                        </div>
+                        <div class="tab-nature">Financial Statement of Respondent (document must be proved in its entirety by Respondent)</div>
+                        <div class="edit-controls">
+                            <a href="document_f390853c-f119-48ba-be3d-326971be5a4b_highlighted.pdf#page=805" target="_blank" class="click-instruction" id="link-52">
+                                👆 Click to open PDF at page 805
+                            </a>
+                            <button class="edit-button" onclick="editPage(52, 805)">✏️ Edit Page</button>
+                        </div>
+                        <div class="edit-form" id="edit-form-52">
+                            <label style="font-weight: 600; color: #2E7D32;">📝 New Page Number:</label>
+                            <input type="number" class="page-input" id="page-input-52" min="1" max="1223" value="805" placeholder="Page #">
+                            <button class="confirm-btn" onclick="confirmEdit(52)">✅ Update Link</button>
+                            <button class="cancel-btn" onclick="cancelEdit(52)">❌ Cancel</button>
+                        </div>
+                    </div>
+                
+                    <div class="tab-item" id="tab-53">
+                        <div class="tab-header">
+                            <div class="tab-number">Tab 53</div>
+                            <div class="tab-date">2016</div>
+                        </div>
+                        <div class="tab-nature">Income Tax Return of Applicant (contents admitted as truth by the Applicant)</div>
+                        <div class="edit-controls">
+                            <a href="document_f390853c-f119-48ba-be3d-326971be5a4b_highlighted.pdf#page=825" target="_blank" class="click-instruction" id="link-53">
+                                👆 Click to open PDF at page 825
+                            </a>
+                            <button class="edit-button" onclick="editPage(53, 825)">✏️ Edit Page</button>
+                        </div>
+                        <div class="edit-form" id="edit-form-53">
+                            <label style="font-weight: 600; color: #2E7D32;">📝 New Page Number:</label>
+                            <input type="number" class="page-input" id="page-input-53" min="1" max="1223" value="825" placeholder="Page #">
+                            <button class="confirm-btn" onclick="confirmEdit(53)">✅ Update Link</button>
+                            <button class="cancel-btn" onclick="cancelEdit(53)">❌ Cancel</button>
+                        </div>
+                    </div>
+                
+                    <div class="tab-item" id="tab-54">
+                        <div class="tab-header">
+                            <div class="tab-number">Tab 54</div>
+                            <div class="tab-date">2017</div>
+                        </div>
+                        <div class="tab-nature">Income Tax Return of Applicant (contents admitted as truth by the Applicant)</div>
+                        <div class="edit-controls">
+                            <a href="document_f390853c-f119-48ba-be3d-326971be5a4b_highlighted.pdf#page=845" target="_blank" class="click-instruction" id="link-54">
+                                👆 Click to open PDF at page 845
+                            </a>
+                            <button class="edit-button" onclick="editPage(54, 845)">✏️ Edit Page</button>
+                        </div>
+                        <div class="edit-form" id="edit-form-54">
+                            <label style="font-weight: 600; color: #2E7D32;">📝 New Page Number:</label>
+                            <input type="number" class="page-input" id="page-input-54" min="1" max="1223" value="845" placeholder="Page #">
+                            <button class="confirm-btn" onclick="confirmEdit(54)">✅ Update Link</button>
+                            <button class="cancel-btn" onclick="cancelEdit(54)">❌ Cancel</button>
+                        </div>
+                    </div>
+                
+                    <div class="tab-item" id="tab-55">
+                        <div class="tab-header">
+                            <div class="tab-number">Tab 55</div>
+                            <div class="tab-date">2018</div>
+                        </div>
+                        <div class="tab-nature">Income Tax Return of Applicant (contents admitted as truth by the Applicant)</div>
+                        <div class="edit-controls">
+                            <a href="document_f390853c-f119-48ba-be3d-326971be5a4b_highlighted.pdf#page=865" target="_blank" class="click-instruction" id="link-55">
+                                👆 Click to open PDF at page 865
+                            </a>
+                            <button class="edit-button" onclick="editPage(55, 865)">✏️ Edit Page</button>
+                        </div>
+                        <div class="edit-form" id="edit-form-55">
+                            <label style="font-weight: 600; color: #2E7D32;">📝 New Page Number:</label>
+                            <input type="number" class="page-input" id="page-input-55" min="1" max="1223" value="865" placeholder="Page #">
+                            <button class="confirm-btn" onclick="confirmEdit(55)">✅ Update Link</button>
+                            <button class="cancel-btn" onclick="cancelEdit(55)">❌ Cancel</button>
+                        </div>
+                    </div>
+                
+                    <div class="tab-item" id="tab-56">
+                        <div class="tab-header">
+                            <div class="tab-number">Tab 56</div>
+                            <div class="tab-date">2019</div>
+                        </div>
+                        <div class="tab-nature">Income Tax Return of Applicant (contents admitted as truth by the Applicant)</div>
+                        <div class="edit-controls">
+                            <a href="document_f390853c-f119-48ba-be3d-326971be5a4b_highlighted.pdf#page=885" target="_blank" class="click-instruction" id="link-56">
+                                👆 Click to open PDF at page 885
+                            </a>
+                            <button class="edit-button" onclick="editPage(56, 885)">✏️ Edit Page</button>
+                        </div>
+                        <div class="edit-form" id="edit-form-56">
+                            <label style="font-weight: 600; color: #2E7D32;">📝 New Page Number:</label>
+                            <input type="number" class="page-input" id="page-input-56" min="1" max="1223" value="885" placeholder="Page #">
+                            <button class="confirm-btn" onclick="confirmEdit(56)">✅ Update Link</button>
+                            <button class="cancel-btn" onclick="cancelEdit(56)">❌ Cancel</button>
+                        </div>
+                    </div>
+                
+                    <div class="tab-item" id="tab-57">
+                        <div class="tab-header">
+                            <div class="tab-number">Tab 57</div>
+                            <div class="tab-date">2020</div>
+                        </div>
+                        <div class="tab-nature">Income Tax Return of Applicant (contents admitted as truth by the Applicant)</div>
+                        <div class="edit-controls">
+                            <a href="document_f390853c-f119-48ba-be3d-326971be5a4b_highlighted.pdf#page=905" target="_blank" class="click-instruction" id="link-57">
+                                👆 Click to open PDF at page 905
+                            </a>
+                            <button class="edit-button" onclick="editPage(57, 905)">✏️ Edit Page</button>
+                        </div>
+                        <div class="edit-form" id="edit-form-57">
+                            <label style="font-weight: 600; color: #2E7D32;">📝 New Page Number:</label>
+                            <input type="number" class="page-input" id="page-input-57" min="1" max="1223" value="905" placeholder="Page #">
+                            <button class="confirm-btn" onclick="confirmEdit(57)">✅ Update Link</button>
+                            <button class="cancel-btn" onclick="cancelEdit(57)">❌ Cancel</button>
+                        </div>
+                    </div>
+                
+                    <div class="tab-item" id="tab-58">
+                        <div class="tab-header">
+                            <div class="tab-number">Tab 58</div>
+                            <div class="tab-date">2016</div>
+                        </div>
+                        <div class="tab-nature">Income Tax Return of the Respondent (document must be proved in its entirety by Respondent)</div>
+                        <div class="edit-controls">
+                            <a href="document_f390853c-f119-48ba-be3d-326971be5a4b_highlighted.pdf#page=925" target="_blank" class="click-instruction" id="link-58">
+                                👆 Click to open PDF at page 925
+                            </a>
+                            <button class="edit-button" onclick="editPage(58, 925)">✏️ Edit Page</button>
+                        </div>
+                        <div class="edit-form" id="edit-form-58">
+                            <label style="font-weight: 600; color: #2E7D32;">📝 New Page Number:</label>
+                            <input type="number" class="page-input" id="page-input-58" min="1" max="1223" value="925" placeholder="Page #">
+                            <button class="confirm-btn" onclick="confirmEdit(58)">✅ Update Link</button>
+                            <button class="cancel-btn" onclick="cancelEdit(58)">❌ Cancel</button>
+                        </div>
+                    </div>
+                
+                    <div class="tab-item" id="tab-59">
+                        <div class="tab-header">
+                            <div class="tab-number">Tab 59</div>
+                            <div class="tab-date">2017</div>
+                        </div>
+                        <div class="tab-nature">Income Tax Return of the Respondent (document must be proved in its entirety by Respondent)</div>
+                        <div class="edit-controls">
+                            <a href="document_f390853c-f119-48ba-be3d-326971be5a4b_highlighted.pdf#page=945" target="_blank" class="click-instruction" id="link-59">
+                                👆 Click to open PDF at page 945
+                            </a>
+                            <button class="edit-button" onclick="editPage(59, 945)">✏️ Edit Page</button>
+                        </div>
+                        <div class="edit-form" id="edit-form-59">
+                            <label style="font-weight: 600; color: #2E7D32;">📝 New Page Number:</label>
+                            <input type="number" class="page-input" id="page-input-59" min="1" max="1223" value="945" placeholder="Page #">
+                            <button class="confirm-btn" onclick="confirmEdit(59)">✅ Update Link</button>
+                            <button class="cancel-btn" onclick="cancelEdit(59)">❌ Cancel</button>
+                        </div>
+                    </div>
+                
+                    <div class="tab-item" id="tab-60">
+                        <div class="tab-header">
+                            <div class="tab-number">Tab 60</div>
+                            <div class="tab-date">2018</div>
+                        </div>
+                        <div class="tab-nature">Income Tax Return of the Respondent (document must be proved in its entirety by Respondent)</div>
+                        <div class="edit-controls">
+                            <a href="document_f390853c-f119-48ba-be3d-326971be5a4b_highlighted.pdf#page=965" target="_blank" class="click-instruction" id="link-60">
+                                👆 Click to open PDF at page 965
+                            </a>
+                            <button class="edit-button" onclick="editPage(60, 965)">✏️ Edit Page</button>
+                        </div>
+                        <div class="edit-form" id="edit-form-60">
+                            <label style="font-weight: 600; color: #2E7D32;">📝 New Page Number:</label>
+                            <input type="number" class="page-input" id="page-input-60" min="1" max="1223" value="965" placeholder="Page #">
+                            <button class="confirm-btn" onclick="confirmEdit(60)">✅ Update Link</button>
+                            <button class="cancel-btn" onclick="cancelEdit(60)">❌ Cancel</button>
+                        </div>
+                    </div>
+                
+                    <div class="tab-item" id="tab-61">
+                        <div class="tab-header">
+                            <div class="tab-number">Tab 61</div>
+                            <div class="tab-date">2019</div>
+                        </div>
+                        <div class="tab-nature">Income Tax Return of the Respondent (document must be proved in its entirety by Respondent)</div>
+                        <div class="edit-controls">
+                            <a href="document_f390853c-f119-48ba-be3d-326971be5a4b_highlighted.pdf#page=985" target="_blank" class="click-instruction" id="link-61">
+                                👆 Click to open PDF at page 985
+                            </a>
+                            <button class="edit-button" onclick="editPage(61, 985)">✏️ Edit Page</button>
+                        </div>
+                        <div class="edit-form" id="edit-form-61">
+                            <label style="font-weight: 600; color: #2E7D32;">📝 New Page Number:</label>
+                            <input type="number" class="page-input" id="page-input-61" min="1" max="1223" value="985" placeholder="Page #">
+                            <button class="confirm-btn" onclick="confirmEdit(61)">✅ Update Link</button>
+                            <button class="cancel-btn" onclick="cancelEdit(61)">❌ Cancel</button>
+                        </div>
+                    </div>
+                
+                    <div class="tab-item" id="tab-62">
+                        <div class="tab-header">
+                            <div class="tab-number">Tab 62</div>
+                            <div class="tab-date">2020</div>
+                        </div>
+                        <div class="tab-nature">Income Tax Return of the Respondent (document must be proved in its entirety by Respondent)</div>
+                        <div class="edit-controls">
+                            <a href="document_f390853c-f119-48ba-be3d-326971be5a4b_highlighted.pdf#page=1005" target="_blank" class="click-instruction" id="link-62">
+                                👆 Click to open PDF at page 1005
+                            </a>
+                            <button class="edit-button" onclick="editPage(62, 1005)">✏️ Edit Page</button>
+                        </div>
+                        <div class="edit-form" id="edit-form-62">
+                            <label style="font-weight: 600; color: #2E7D32;">📝 New Page Number:</label>
+                            <input type="number" class="page-input" id="page-input-62" min="1" max="1223" value="1005" placeholder="Page #">
+                            <button class="confirm-btn" onclick="confirmEdit(62)">✅ Update Link</button>
+                            <button class="cancel-btn" onclick="cancelEdit(62)">❌ Cancel</button>
+                        </div>
+                    </div>
+                
+                    <div class="tab-item" id="tab-63">
+                        <div class="tab-header">
+                            <div class="tab-number">Tab 63</div>
+                            <div class="tab-date">2021</div>
+                        </div>
+                        <div class="tab-nature">Income Tax Return of the Respondent (document must be proved in its entirety by Respondent)</div>
+                        <div class="edit-controls">
+                            <a href="document_f390853c-f119-48ba-be3d-326971be5a4b_highlighted.pdf#page=1025" target="_blank" class="click-instruction" id="link-63">
+                                👆 Click to open PDF at page 1025
+                            </a>
+                            <button class="edit-button" onclick="editPage(63, 1025)">✏️ Edit Page</button>
+                        </div>
+                        <div class="edit-form" id="edit-form-63">
+                            <label style="font-weight: 600; color: #2E7D32;">📝 New Page Number:</label>
+                            <input type="number" class="page-input" id="page-input-63" min="1" max="1223" value="1025" placeholder="Page #">
+                            <button class="confirm-btn" onclick="confirmEdit(63)">✅ Update Link</button>
+                            <button class="cancel-btn" onclick="cancelEdit(63)">❌ Cancel</button>
+                        </div>
+                    </div>
+                
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p><strong>💡 Tip:</strong> Keep this HTML file in the same folder as your PDF for best results</p>
+            <p>Generated by HyperlinkLaw.com • Professional Legal Document Management</p>
+            <p><small>Total: 63 clickable document references</small></p>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        window.currentDocumentId = 'f390853c-f119-48ba-be3d-326971be5a4b';
+        window.currentCaseId = '402a559a-f1d2-46e0-aee5-b72fb2a74311';
+        
+        // Edit page function
+        window.editPage = function(tabNo, currentPage) {
+            console.log('🎯 Edit button clicked for Tab ' + tabNo);
+            
+            // Hide all edit forms first
+            var allForms = document.querySelectorAll('.edit-form');
+            for (var i = 0; i < allForms.length; i++) {
+                allForms[i].classList.remove('active');
+            }
+            
+            // Show this edit form
+            var editForm = document.getElementById('edit-form-' + tabNo);
+            if (editForm) {
+                editForm.classList.add('active');
+                console.log('✅ Edit form shown for Tab ' + tabNo);
+                
+                // Focus on input after short delay
+                setTimeout(function() {
+                    var input = document.getElementById('page-input-' + tabNo);
+                    if (input) {
+                        input.focus();
+                        input.select();
+                        console.log('📝 Input focused for Tab ' + tabNo);
+                    }
+                }, 150);
+            } else {
+                console.error('❌ Edit form not found for Tab ' + tabNo);
+            }
+        };
+        
+        // Cancel edit function
+        window.cancelEdit = function(tabNo) {
+            console.log('❌ Cancel button clicked for Tab ' + tabNo);
+            var editForm = document.getElementById('edit-form-' + tabNo);
+            if (editForm) {
+                editForm.classList.remove('active');
+                console.log('✅ Edit form hidden for Tab ' + tabNo);
+            }
+        };
+        
+        // Confirm edit function
+        window.confirmEdit = function(tabNo) {
+            console.log('✅ Confirm button clicked for Tab ' + tabNo);
+            
+            var input = document.getElementById('page-input-' + tabNo);
+            var newPage = parseInt(input.value);
+            
+            console.log('📝 New page value: ' + newPage);
+            
+            if (!newPage || newPage < 1) {
+                alert('Please enter a valid page number');
+                return;
+            }
+            
+            // Show updating status
+            var editForm = document.getElementById('edit-form-' + tabNo);
+            editForm.innerHTML = '<div class="updating">🔄 Updating hyperlink...</div>';
+            
+            // Make API call
+            fetch('/api/documents/' + window.currentDocumentId + '/update-tab-page', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    tabNo: tabNo,
+                    newPage: newPage,
+                    caseId: window.currentCaseId
+                })
+            })
+            .then(function(response) {
+                console.log('📡 API response status: ' + response.status);
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error('API returned status ' + response.status);
+                }
+            })
+            .then(function(result) {
+                console.log('✅ API response: ' + JSON.stringify(result));
+                
+                // Update the link immediately
+                var link = document.getElementById('link-' + tabNo);
+                var newHref = 'document_f390853c-f119-48ba-be3d-326971be5a4b_highlighted.pdf#page=' + newPage;
+                link.href = newHref;
+                link.innerHTML = '👆 Click to open PDF at page ' + newPage;
+                
+                console.log('🔗 Link updated to: ' + newHref);
+                
+                // Hide edit form and restore it
+                editForm.classList.remove('active');
+                editForm.innerHTML = 
+                    '<label style="font-weight: 600; color: #2E7D32;">📝 New Page Number:</label>' +
+                    '<input type="number" class="page-input" id="page-input-' + tabNo + '" min="1" max="1223" value="' + newPage + '" placeholder="Page #">' +
+                    '<button class="confirm-btn" onclick="confirmEdit(' + tabNo + ')">✅ Update Link</button>' +
+                    '<button class="cancel-btn" onclick="cancelEdit(' + tabNo + ')">❌ Cancel</button>';
+                
+                // Show success message
+                var successMsg = document.createElement('div');
+                successMsg.className = 'updating';
+                successMsg.style.background = '#4caf50';
+                successMsg.innerHTML = '✅ Hyperlink updated!';
+                editForm.parentNode.appendChild(successMsg);
+                
+                setTimeout(function() {
+                    if (successMsg.parentNode) {
+                        successMsg.parentNode.removeChild(successMsg);
+                    }
+                }, 2000);
+                
+                console.log('🎉 Tab update completed successfully!');
+            })
+            .catch(function(error) {
+                console.error('❌ Error updating tab: ' + error.message);
+                
+                // Show error and restore form
+                editForm.innerHTML = 
+                    '<div style="color: red; font-size: 0.9em; margin-bottom: 8px;">❌ Update failed. Try again.</div>' +
+                    '<label style="font-weight: 600; color: #2E7D32;">📝 New Page Number:</label>' +
+                    '<input type="number" class="page-input" id="page-input-' + tabNo + '" min="1" max="1223" value="' + newPage + '" placeholder="Page #">' +
+                    '<button class="confirm-btn" onclick="confirmEdit(' + tabNo + ')">✅ Update Link</button>' +
+                    '<button class="cancel-btn" onclick="cancelEdit(' + tabNo + ')">❌ Cancel</button>';
+            });
+        };
+        
+        // Enter key support
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && e.target.classList.contains('page-input')) {
+                var tabNo = e.target.id.replace('page-input-', '');
+                window.confirmEdit(parseInt(tabNo));
+            }
+        });
+        
+        // Test function to verify JavaScript is working
+        console.log('🚀 Edit functionality loaded successfully');
+        console.log('📄 Document ID: ' + window.currentDocumentId);
+        console.log('📁 Case ID: ' + window.currentCaseId);
+        
+        // Add click test function for debugging
+        window.testEditButton = function() {
+            console.log('🧪 Test function called - JavaScript is working!');
+            alert('JavaScript is working! Edit buttons should work now.');
+        };
+        
+        // Test that edit functions are properly loaded
+        console.log('📋 Functions available:', {
+            editPage: typeof window.editPage,
+            confirmEdit: typeof window.confirmEdit,
+            cancelEdit: typeof window.cancelEdit,
+            testEditButton: typeof window.testEditButton
+        });
+    </script>
+</body>
+</html>

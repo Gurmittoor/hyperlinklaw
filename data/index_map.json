@@ -1,0 +1,45 @@
+{
+  "success": true,
+  "strict_index_only": true,
+  "index_first_page": 2,
+  "total_tabs": 5,
+  "links_found": 5,
+  "links_placed": 5,
+  "items": [
+    {
+      "no": 1,
+      "label": "Opening Statements",
+      "start_page": 10,
+      "end_page": 24,
+      "found": true
+    },
+    {
+      "no": 2,
+      "label": "Witness Testimony - Day 1",
+      "start_page": 25,
+      "end_page": 44,
+      "found": true
+    },
+    {
+      "no": 3,
+      "label": "Evidence Presentation",
+      "start_page": 45,
+      "end_page": 59,
+      "found": true
+    },
+    {
+      "no": 4,
+      "label": "Cross Examination",
+      "start_page": 60,
+      "end_page": 79,
+      "found": true
+    },
+    {
+      "no": 5,
+      "label": "Closing Arguments",
+      "start_page": 80,
+      "end_page": 95,
+      "found": true
+    }
+  ]
+}

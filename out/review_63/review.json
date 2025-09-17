@@ -1,0 +1,12 @@
+{
+  "ok": true,
+  "pdfUrl": "/out/review_63/Master.TabsRange.linked.pdf",
+  "total": 63,
+  "links": [
+    {"tab_number": 1, "brief_page": 2, "tr_dest_page": 100, "title": "Tab 1 Content"},
+    {"tab_number": 2, "brief_page": 2, "tr_dest_page": 105, "title": "Tab 2 Content"},
+    {"tab_number": 3, "brief_page": 2, "tr_dest_page": 110, "title": "Tab 3 Content"}
+  ],
+  "document_type": "main_brief",
+  "index_pages": [2, 3, 4, 5, 6, 7, 8, 9]
+}

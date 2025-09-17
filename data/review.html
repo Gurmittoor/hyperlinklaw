@@ -1,0 +1,116 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <title>Index Hyperlink Reviewer</title>
+  <style>
+    html,body {margin:0;height:100%;font-family:system-ui,Segoe UI,Roboto,Arial,sans-serif;background:#0b0b0b;color:#fafafa}
+    .wrap{display:flex;height:100%}
+    .left{width:520px;border-right:1px solid #222;padding:14px;overflow:auto}
+    .right{flex:1;height:100%}
+    .item{background:#131313;border:1px solid #222;border-radius:12px;padding:12px;margin-bottom:10px}
+    .title{font-size:14px;margin:0 0 6px 0;font-weight:600;display:flex;align-items:center;gap:8px}
+    .meta{color:#bdbdbd;font-size:12px}
+    .row{display:flex;gap:8px;margin-top:10px}
+    button{border:0;border-radius:8px;padding:6px 10px;background:#2d6cdf;color:#fff;cursor:pointer}
+    button:disabled{background:#666;cursor:not-allowed}
+    button.apply{background:#22a565}
+    input[type=number]{width:90px;border-radius:6px;border:1px solid #333;background:#0f0f0f;color:#fff;padding:6px}
+    .note{font-size:12px;color:#9a9a9a;margin:8px 0 16px}
+    .status{color:#22a565}
+    .status.missing{color:#dc2626}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="left">
+      <h3 style="margin-top:6px">Index Items (Auto-Detected)</h3>
+      <div class="note">Click "Open" to jump the PDF on the right. If a page is off, type a new start page and press "Apply & Save".</div>
+      <div id="list"></div>
+    </div>
+    <div class="right">
+      <!-- Most browsers support #page=N anchors. -->
+      <embed id="pdf" src="case_linked.pdf#page=1&view=FitH" type="application/pdf" width="100%" height="100%">
+    </div>
+  </div>
+
+  <script>
+    async function load() {
+      try {
+        const res = await fetch('index_map.json');
+        const data = await res.json();
+        const list = document.getElementById('list');
+        list.innerHTML = '';
+
+        console.log('Loaded manifest:', data);
+
+        (data.items || []).forEach(it => {
+          const found = it.found || false;
+          const statusIcon = found ? '✓' : '✗';
+          const statusClass = found ? 'status' : 'status missing';
+          
+          const div = document.createElement('div');
+          div.className = 'item';
+          div.innerHTML = `
+            <p class="title">
+              <span class="${statusClass}">${statusIcon}</span>
+              <b>${it.no}.</b> ${it.label}
+            </p>
+            <div class="meta">Pages: ${it.start_page || '—'}${it.end_page && it.end_page !== it.start_page ? '–'+it.end_page : ''}</div>
+            <div class="row">
+              <button data-open="${it.start_page || ''}" ${!found ? 'disabled' : ''}>Open</button>
+              <button data-open="${it.start_page || ''}" data-pop="1" ${!found ? 'disabled' : ''}>Open in new</button>
+              <input type="number" min="1" placeholder="New start" value="${it.start_page || ''}">
+              <button class="apply" data-apply="${it.no}">Apply & Save</button>
+            </div>
+          `;
+          list.appendChild(div);
+        });
+
+        list.addEventListener('click', async (e) => {
+          if (e.target.tagName !== 'BUTTON') return;
+          const pdf = document.getElementById('pdf');
+
+          if (e.target.hasAttribute('data-open')) {
+            const p = e.target.getAttribute('data-open');
+            if (!p || e.target.disabled) return;
+            if (e.target.hasAttribute('data-pop')) {
+              window.open(`case_linked.pdf#page=${p}&view=FitH`, '_blank');
+            } else {
+              pdf.src = `case_linked.pdf#page=${p}&view=FitH`;
+            }
+          }
+
+          if (e.target.hasAttribute('data-apply')) {
+            const no = e.target.getAttribute('data-apply');
+            const container = e.target.closest('.item');
+            const input = container.querySelector('input[type=number]');
+            const newStart = parseInt(input.value, 10);
+            if (!newStart) return alert('Enter a valid page number');
+
+            // Simple override notification (in a real app, this would call the server)
+            console.log(`Override: Tab ${no} → Page ${newStart}`);
+            alert(`Tab ${no} set to page ${newStart}. In a full implementation, this would regenerate the linked PDF.`);
+            
+            // Update the display
+            const metaDiv = container.querySelector('.meta');
+            metaDiv.textContent = `Pages: ${newStart}`;
+            
+            // Update status
+            const titleSpan = container.querySelector('.title .status');
+            titleSpan.className = 'status';
+            titleSpan.textContent = '✓';
+            
+            // Enable buttons
+            container.querySelectorAll('button[data-open]').forEach(btn => btn.disabled = false);
+          }
+        });
+      } catch (error) {
+        console.error('Failed to load manifest:', error);
+        document.getElementById('list').innerHTML = '<p style="color:#dc2626">Failed to load index data. Make sure index_map.json exists.</p>';
+      }
+    }
+    load();
+  </script>
+</body>
+</html>
