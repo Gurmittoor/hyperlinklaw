@@ -9,7 +9,7 @@
   "dependencies": {
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "@google-cloud/vision": "^3.3.0"
+    "@google-cloud/vision": "^5.3.3"
   },
   "devDependencies": {
     "vite": "^5.4.0",
