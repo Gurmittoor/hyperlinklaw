@@ -5,7 +5,7 @@ import fs from "fs";
 
 export const config = {
   api: {
-    bodyParser: false, // we’re using formidable for file uploads
+    bodyParser: false, // we’re using formidable to parse file uploads
   },
 };
 
@@ -17,6 +17,7 @@ export default async function handler(req, res) {
         .status(500)
         .json({ ok: false, error: "GOOGLE_APPLICATION_CREDENTIALS_JSON is missing" });
     }
+
     const credentials = JSON.parse(credsJson);
     const client = new vision.ImageAnnotatorClient({ credentials });
 
@@ -34,29 +35,18 @@ export default async function handler(req, res) {
           return res.status(400).json({ ok: false, error: "No file uploaded" });
         }
 
-        // Read PDF content into buffer
+        // Read PDF file
         const pdfBuffer = fs.readFileSync(filePath);
 
-        // Vision API request for PDF OCR
-        const [result] = await client.asyncBatchAnnotateFiles({
-          requests: [
-            {
-              inputConfig: {
-                mimeType: "application/pdf",
-                content: pdfBuffer.toString("base64"),
-              },
-              features: [{ type: "DOCUMENT_TEXT_DETECTION" }],
-              outputConfig: {
-                gcsDestination: {
-                  uri: "gs://YOUR_BUCKET/ocr-output/", // Or handle inline JSON
-                },
-                batchSize: 2,
-              },
-            },
-          ],
+        // Run OCR on PDF pages inline
+        const [result] = await client.documentTextDetection({
+          image: { content: pdfBuffer },
         });
 
-        return res.status(200).json({ ok: true, result });
+        // Extract full text
+        const text = result.fullTextAnnotation?.text || "";
+
+        return res.status(200).json({ ok: true, text });
       });
     } else {
       return res.status(405).json({ ok: false, error: "Method not allowed" });
